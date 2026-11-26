@@ -29,6 +29,11 @@
       --wood-3: #e2be8d;
       --wood-border: #cfa46e;
       --wood-text: #5c3a21;
+      --gold-1: #fff6cc;
+      --gold-2: #ffe07d;
+      --gold-3: #f6be4f;
+      --gold-border: #d99326;
+      --gold-text: #5e3800;
     }
 
     * {
@@ -45,6 +50,7 @@
       height: 100%;
       height: 100dvh;
       overflow: hidden;
+      overscroll-behavior: none;
       font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: linear-gradient(160deg, var(--bg-top) 0%, var(--bg-mid) 52%, var(--bg-bot) 100%);
       color: #6b213c;
@@ -55,7 +61,7 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 22px);
+      padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 14px);
       position: relative;
     }
 
@@ -77,38 +83,52 @@
     }
 
     @keyframes floatUp {
-      0% {
-        transform: translateY(0) rotate(0deg) scale(0.9);
-        opacity: 0;
-      }
-      15% {
-        opacity: 0.28;
-      }
-      85% {
-        opacity: 0.22;
-      }
-      100% {
-        transform: translateY(-110vh) rotate(25deg) scale(1.1);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) rotate(0deg) scale(0.9); opacity: 0; }
+      15% { opacity: 0.28; }
+      85% { opacity: 0.22; }
+      100% { transform: translateY(-110vh) rotate(25deg) scale(1.1); opacity: 0; }
     }
 
-    /* Górny pasek (tylko przycisk dźwięku) */
+    /* Górny pasek: Ulubione po lewej, Dźwięk po prawej */
     header {
       width: 100%;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
-      z-index: 2;
+      z-index: 5;
       max-width: 440px;
+    }
+
+    .pill-btn {
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.58);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #8f2d52;
+      box-shadow: 0 4px 15px rgba(230, 57, 115, 0.12);
+      transition: transform 0.15s ease;
+    }
+
+    .pill-btn:active {
+      transform: scale(0.94);
     }
 
     .icon-btn {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.78);
-      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.58);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       font-size: 17px;
@@ -125,6 +145,36 @@
       transform: scale(0.92);
     }
 
+    /* Baner rocznicowy */
+    .anniversary-banner {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 22px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff4d88 0%, #e63973 50%, #ff4d88 100%);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      box-shadow:
+        0 8px 22px rgba(230, 57, 115, 0.35),
+        inset 0 1px 2px rgba(255, 255, 255, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      z-index: 4;
+      animation: bannerPulse 2.2s ease-in-out infinite;
+    }
+
+    .anniversary-banner.show {
+      display: flex;
+    }
+
+    @keyframes bannerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
     /* Główna strefa centralna */
     main {
       flex: 1;
@@ -136,14 +186,20 @@
       justify-content: center;
       position: relative;
       z-index: 2;
-      gap: 28px;
+      gap: 20px;
+      padding-bottom: 58px;
     }
 
-    /* Scena prezentacji: pokazuje ALBO patyczek, ALBO zdjęcie */
+    main.no-pull-pad {
+      padding-bottom: 0;
+    }
+
+    /* Scena prezentacji */
     .stage {
       width: 100%;
-      min-height: 220px;
+      min-height: 205px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
@@ -168,11 +224,11 @@
       to { transform: scale(1.22); opacity: 1; }
     }
 
-    /* Ramka Polaroid na wspólne zdjęcie (zamiast patyczka) */
+    /* Ramka Polaroid na wspólne zdjęcie */
     .photo-card {
       display: none;
       background: #ffffff;
-      padding: 12px 12px 34px 12px;
+      padding: 12px 12px 36px 12px;
       border-radius: 18px;
       box-shadow:
         0 16px 34px rgba(138, 43, 77, 0.24),
@@ -195,8 +251,8 @@
     }
 
     .photo-card img {
-      width: 245px;
-      height: 245px;
+      width: 230px;
+      height: 230px;
       object-fit: cover;
       border-radius: 12px;
       display: block;
@@ -215,12 +271,14 @@
       letter-spacing: 0.3px;
     }
 
-    /* Drewniany patyczek */
+    /* Drewniany lub złoty patyczek */
     .stick-wrapper {
       width: 100%;
       display: none;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 10px;
       opacity: 0;
       transform: translateY(35px) scale(0.84) rotate(-4deg);
       transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.22, 1.25, 0.36, 1);
@@ -250,6 +308,24 @@
       100% { opacity: 0;   transform: translateY(-20px) scale(0.9) rotate(0deg); }
     }
 
+    .golden-tag {
+      display: none;
+      padding: 4px 14px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ffe98a 0%, #f5b935 100%);
+      border: 1.5px solid #fff8d6;
+      color: #633b00;
+      font-size: 11.5px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(217, 147, 38, 0.35);
+    }
+
+    .stick-wrapper.is-golden .golden-tag {
+      display: inline-block;
+    }
+
     .popsicle-stick {
       position: relative;
       width: 100%;
@@ -276,6 +352,27 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      overflow: hidden;
+    }
+
+    /* Złoty wariant patyczka */
+    .stick-wrapper.is-golden .popsicle-stick {
+      background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0.65) 50%, rgba(255, 255, 255, 0) 75%),
+        linear-gradient(180deg, var(--gold-1) 0%, var(--gold-2) 52%, var(--gold-3) 100%);
+      background-size: 220% 100%, 100% 100%;
+      border: 2.5px solid var(--gold-border);
+      box-shadow:
+        0 16px 34px rgba(217, 147, 38, 0.42),
+        0 4px 0 #c47f17,
+        inset 0 2px 6px rgba(255, 255, 255, 0.9),
+        inset 0 -3px 6px rgba(184, 118, 14, 0.25);
+      animation: goldShimmer 2.8s ease-in-out infinite;
+    }
+
+    @keyframes goldShimmer {
+      0% { background-position: 200% 0, 0 0; }
+      100% { background-position: -200% 0, 0 0; }
     }
 
     .popsicle-stick::before,
@@ -289,16 +386,16 @@
       box-shadow: inset 0 1px 2px rgba(92, 58, 33, 0.25);
     }
 
-    .popsicle-stick::before {
-      left: 16px;
+    .stick-wrapper.is-golden .popsicle-stick::before,
+    .stick-wrapper.is-golden .popsicle-stick::after {
+      background: rgba(184, 118, 14, 0.28);
     }
 
-    .popsicle-stick::after {
-      right: 16px;
-    }
+    .popsicle-stick::before { left: 16px; }
+    .popsicle-stick::after { right: 16px; }
 
     .stick-text {
-      font-size: 21px;
+      font-size: 20.5px;
       font-weight: 800;
       line-height: 1.3;
       color: var(--wood-text);
@@ -306,8 +403,49 @@
       word-break: break-word;
     }
 
+    .stick-wrapper.is-golden .stick-text {
+      color: var(--gold-text);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
     .stick-text.long-text {
-      font-size: 18px;
+      font-size: 17px;
+    }
+
+    /* Przycisk zapisu do Ulubionych pod aktualnym wynikiem */
+    .fav-action-btn {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      color: #9e2d56;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(230, 57, 115, 0.14);
+      transition: transform 0.15s ease, background 0.2s ease;
+      z-index: 4;
+    }
+
+    .fav-action-btn.show {
+      display: inline-flex;
+    }
+
+    .fav-action-btn.saved {
+      background: #ffe0ec;
+      border-color: #ff8fb8;
+      color: #c92a60;
+    }
+
+    .fav-action-btn:active {
+      transform: scale(0.94);
     }
 
     /* Strefa przycisku "Losuj" i limitu dziennego */
@@ -316,21 +454,21 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
     }
 
     .draw-btn {
       position: relative;
       min-width: 215px;
-      height: 74px;
+      height: 70px;
       padding: 0 44px;
       border: none;
       border-radius: 999px;
       background: linear-gradient(180deg, #ff5c93 0%, var(--accent) 100%);
       color: #ffffff;
       font-family: inherit;
-      font-size: 28px;
+      font-size: 27px;
       font-weight: 900;
       letter-spacing: 0.5px;
       cursor: pointer;
@@ -389,12 +527,12 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1.5px solid rgba(255, 255, 255, 0.92);
       border-radius: 24px;
-      padding: 16px 22px;
+      padding: 15px 22px;
       box-shadow: 0 10px 26px rgba(230, 57, 115, 0.16);
       max-width: 340px;
       gap: 4px;
@@ -422,18 +560,218 @@
       to { opacity: 1; transform: scale(1); }
     }
 
+    /* Wystający z dołu patyczek do wyciągania gestem Swipe Up */
+    .pull-dock {
+      position: fixed;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 68px;
+      height: 92px;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .pull-dock.hidden {
+      display: none;
+    }
+
+    .pull-stick-tip {
+      width: 52px;
+      height: 96px;
+      border-radius: 26px 26px 8px 8px;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(185, 134, 75, 0.08) 0px,
+          rgba(185, 134, 75, 0.08) 2px,
+          transparent 2px,
+          transparent 8px
+        ),
+        linear-gradient(90deg, var(--wood-1) 0%, var(--wood-2) 55%, var(--wood-3) 100%);
+      border: 2px solid var(--wood-border);
+      box-shadow:
+        0 -6px 18px rgba(138, 43, 77, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 10px;
+      gap: 2px;
+      transition: transform 0.25s cubic-bezier(0.22, 1.25, 0.36, 1);
+      animation: gentleNudge 2.6s ease-in-out infinite;
+    }
+
+    .pull-dock.dragging .pull-stick-tip {
+      animation: none;
+      transition: none;
+    }
+
+    @keyframes gentleNudge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .pull-arrow {
+      font-size: 13px;
+      font-weight: 900;
+      color: #8c5a32;
+      line-height: 1;
+    }
+
+    .pull-label {
+      font-size: 9.5px;
+      font-weight: 900;
+      color: #8c5a32;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    /* Modal Ulubionych */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(58, 16, 33, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 40;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      max-width: 480px;
+      max-height: 82dvh;
+      background: linear-gradient(180deg, #fff5f9 0%, #ffe6f0 100%);
+      border-radius: 28px 28px 0 0;
+      padding: 20px 20px calc(env(safe-area-inset-bottom) + 24px);
+      box-shadow: 0 -12px 36px rgba(92, 23, 50, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: slideUpSheet 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes slideUpSheet {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(230, 57, 115, 0.15);
+    }
+
+    .modal-header h2 {
+      font-size: 19px;
+      font-weight: 900;
+      color: #8f2d52;
+    }
+
+    .fav-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .fav-empty {
+      text-align: center;
+      padding: 36px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #9e4768;
+      line-height: 1.5;
+    }
+
+    .fav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 12px rgba(230, 57, 115, 0.08);
+    }
+
+    .fav-item.golden {
+      background: linear-gradient(135deg, #fff9db 0%, #ffe699 100%);
+      border-color: #eab338;
+    }
+
+    .fav-item-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .fav-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      cursor: zoom-in;
+      flex-shrink: 0;
+    }
+
+    .fav-item-text {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #5c3a21;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .fav-item.golden .fav-item-text {
+      color: #633b00;
+    }
+
+    .fav-del-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(230, 57, 115, 0.1);
+      color: #b53864;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
     /* Podgląd zdjęcia na pełnym ekranie po kliknięciu */
     .lightbox {
       position: fixed;
       inset: 0;
-      background: rgba(45, 12, 25, 0.85);
+      background: rgba(45, 12, 25, 0.88);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      z-index: 50;
+      z-index: 60;
       cursor: zoom-out;
     }
 
@@ -460,25 +798,14 @@
     }
 
     @keyframes burst {
-      0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(0.5);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(var(--rot));
-      }
+      0% { opacity: 1; transform: translate(0, 0) scale(0.5); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(var(--rot)); }
     }
 
-    @media (max-height: 680px) {
-      .photo-card img {
-        width: 205px;
-        height: 205px;
-      }
-      .draw-btn {
-        height: 64px;
-        font-size: 24px;
-      }
+    @media (max-height: 700px) {
+      .photo-card img { width: 185px; height: 185px; }
+      .draw-btn { height: 62px; font-size: 24px; }
+      main { gap: 14px; }
     }
   </style>
 </head>
@@ -487,25 +814,32 @@
   <div class="bg-hearts" id="bgHearts"></div>
 
   <header>
+    <button class="pill-btn" id="openFavsBtn" aria-label="Ulubione">❤️ Ulubione <span id="favCountBadge"></span></button>
     <button class="icon-btn" id="soundToggle" aria-label="Dźwięk" title="Włącz/wyłącz dźwięk">🔊</button>
   </header>
 
-  <main>
+  <div class="anniversary-banner" id="anniversaryBanner">DZIŚ ROCZNICA</div>
+
+  <main id="mainArea">
     <div class="stage" id="stage">
       <div class="jar-glow" id="jarGlow"></div>
 
-      <!-- Wspólne zdjęcie (wyświetla się ZAMIAST patyczka, gdy zostanie wylosowane) -->
+      <!-- Wspólne zdjęcie (wyświetla się ZAMIAST patyczka) -->
       <div class="photo-card" id="photoCard" title="Kliknij, aby powiększyć">
         <img id="photoImg" src="" alt="Nasze wspólne zdjęcie ❤️" />
         <div class="photo-caption">My ❤️</div>
       </div>
 
-      <!-- Drewniany patyczek (wyświetla się ZAMIAST zdjęcia, gdy zostanie wylosowany) -->
+      <!-- Drewniany lub złoty patyczek -->
       <div class="stick-wrapper" id="stickWrapper">
+        <span class="golden-tag">✨ Złoty kupon ✨</span>
         <div class="popsicle-stick">
           <div class="stick-text" id="stickText">Kocham Cię! ❤️</div>
         </div>
       </div>
+
+      <!-- Przycisk zapisania aktualnego losu do Ulubionych -->
+      <button class="fav-action-btn" id="favActionBtn">🤍 Zapisz w ulubionych</button>
     </div>
 
     <div class="controls-wrap">
@@ -519,6 +853,25 @@
     </div>
   </main>
 
+  <!-- Wystający z dołu patyczek do wyciągania palcem w górę -->
+  <div class="pull-dock" id="pullDock" title="Pociągnij w górę, aby wylosować">
+    <div class="pull-stick-tip" id="pullStickTip">
+      <span class="pull-arrow">▲</span>
+      <span class="pull-label">Wyciągnij</span>
+    </div>
+  </div>
+
+  <!-- Modal Ulubionych -->
+  <div class="modal-overlay" id="favModal">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Ulubione ❤️</h2>
+        <button class="icon-btn" id="closeFavsBtn" aria-label="Zamknij">✕</button>
+      </div>
+      <div class="fav-list" id="favList"></div>
+    </div>
+  </div>
+
   <!-- Powiększenie zdjęcia po kliknięciu -->
   <div class="lightbox" id="lightbox">
     <img id="lightboxImg" src="" alt="Powiększone zdjęcie ❤️" />
@@ -526,19 +879,48 @@
 
   <script>
     // =========================================================================
-    // 1. WASZE WSPÓLNE ZDJĘCIA (wspólna pula razem z patyczkami)
+    // 1. DATY ROCZNIC (format MM-DD)
+    // =========================================================================
+    const DATY_ROCZNIC = [
+      "04-01", // 1.04 - pierwsze spytanie o randkę
+      "04-25", // 25.04 - pierwsze spotkanie
+      "05-09", // 09.05 - zaręczyny
+      "06-20", // 20.06 - rozpoczęcie związku
+      "07-10", // 10.07 - pierwsze „kocham Cię”
+      "08-31"  // 31.08 - ślub
+    ];
+
+    // =========================================================================
+    // 2. WASZE WSPÓLNE ZDJĘCIA
     // =========================================================================
     const ZDJECIA = [
       "1.jpg",
       "2.jpg",
       "3.jpg",
-      "4.jpeg",
+      "4.jpg",
       "5.jpg",
       "6.jpg"
     ];
 
     // =========================================================================
-    // 2. LISTA WSZYSTKICH 102 PATYCZKÓW TEKSTOWYCH
+    // 3. ZŁOTE KUPONY (każdy może wypaść maksymalnie raz w miesiącu)
+    // =========================================================================
+    const ZLOTE_KUPONY = [
+      "💆‍♀️ Kupon na 30-minutowy masaż",
+      "🍕 Kupon na kolację z dostawą – Ty wybierasz skąd, ja zamawiam i ogarniam resztę",
+      "🍳 Kupon na śniadanie do łóżka (podane prosto pod nos)",
+      "🧹 Kupon na dzień bez obowiązków domowych – przejmuję Twoje zadania na cały dzień",
+      "🎬 Kupon na wieczór filmowy na Twoich zasadach – Ty wybierasz film i przekąski, zero narzekania",
+      "🍰 Kupon na słodką zachciankę – jadę i przywożę wybrany deser od ręki",
+      "🧠 Kupon „Zero decyzji” – dziś ja wymyślam obiad, robię zakupy i planuję cały wieczór",
+      "🎲 Kupon na wieczór z grą / planszówką – pełne skupienie tylko na nas, zero telefonów",
+      "🌅 Kupon na spontaniczną wycieczkę lub spacer – jedziemy w wybrane przez Ciebie miejsce",
+      "🛁 Kupon na wieczór totalnego relaksu – cisza, spokój, zero spraw na głowie i pełna obsługa",
+      "🎟️ Złoty Joker – jedno dowolne życzenie do spełnienia przez męża od ręki!"
+    ];
+
+    // =========================================================================
+    // 4. ZWYKŁE PATYCZKI TEKSTOWE (102 hasła)
     // =========================================================================
     const PATYCZKI = [
       "Kocham Cię! ❤️",
@@ -645,15 +1027,11 @@
       "Jak dobrze, że nasze drogi się spotkały! 💍❤️"
     ];
 
-    // Łączna pula wszystkich losów: najpierw patyczki tekstowe, potem zdjęcia
-    const PULA = [
-      ...PATYCZKI.map(text => ({ type: "text", value: text })),
-      ...ZDJECIA.map(src => ({ type: "photo", value: src }))
-    ];
-
     const LIMIT_DZIENNY = 3;
-    const STORAGE_DRAWN_KEY = "patyczki_wylosowane_v3";
-    const STORAGE_DAILY_KEY = "patyczki_dzis_v3";
+    const STORAGE_REGULAR_DRAWN = "patyczki_reg_drawn_v4";
+    const STORAGE_GOLDEN_MONTH = "patyczki_gold_month_v4";
+    const STORAGE_DAILY_KEY = "patyczki_dzis_v4";
+    const STORAGE_FAVS_KEY = "patyczki_ulubione_v4";
     const SOUND_KEY = "patyczki_dzwiek_v1";
 
     function getTodayKey() {
@@ -664,8 +1042,36 @@
       return `${y}-${m}-${day}`;
     }
 
-    let drawnIndices = JSON.parse(localStorage.getItem(STORAGE_DRAWN_KEY) || "[]")
-      .filter(i => Number.isInteger(i) && i >= 0 && i < PULA.length);
+    function getMonthKey() {
+      return getTodayKey().slice(0, 7); // "YYYY-MM"
+    }
+
+    function getMonthDayKey() {
+      return getTodayKey().slice(5, 10); // "MM-DD"
+    }
+
+    // Wspólna pula zwykłych patyczków + zdjęć
+    const PULA_ZWYKLA = [
+      ...PATYCZKI.map(text => ({ type: "text", value: text })),
+      ...ZDJECIA.map(src => ({ type: "photo", value: src }))
+    ];
+
+    let drawnRegularIndices = JSON.parse(localStorage.getItem(STORAGE_REGULAR_DRAWN) || "[]")
+      .filter(i => Number.isInteger(i) && i >= 0 && i < PULA_ZWYKLA.length);
+
+    function loadGoldenMonthState() {
+      const currentMonth = getMonthKey();
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_GOLDEN_MONTH) || "null");
+        if (saved && saved.month === currentMonth && Array.isArray(saved.drawn)) {
+          return {
+            month: currentMonth,
+            drawn: saved.drawn.filter(i => Number.isInteger(i) && i >= 0 && i < ZLOTE_KUPONY.length)
+          };
+        }
+      } catch (e) {}
+      return { month: currentMonth, drawn: [] };
+    }
 
     function loadDailyState() {
       const today = getTodayKey();
@@ -682,10 +1088,15 @@
       return { date: today, count: 0, lastItem: null };
     }
 
+    let goldenMonthState = loadGoldenMonthState();
     let dailyState = loadDailyState();
+    let favorites = JSON.parse(localStorage.getItem(STORAGE_FAVS_KEY) || "[]");
+    let currentDisplayedItem = null;
     let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
     let isDrawing = false;
 
+    const mainArea = document.getElementById("mainArea");
+    const anniversaryBanner = document.getElementById("anniversaryBanner");
     const drawBtn = document.getElementById("drawBtn");
     const dailyHint = document.getElementById("dailyHint");
     const limitCard = document.getElementById("limitCard");
@@ -693,10 +1104,27 @@
     const stickText = document.getElementById("stickText");
     const photoCard = document.getElementById("photoCard");
     const photoImg = document.getElementById("photoImg");
+    const favActionBtn = document.getElementById("favActionBtn");
+    const openFavsBtn = document.getElementById("openFavsBtn");
+    const closeFavsBtn = document.getElementById("closeFavsBtn");
+    const favCountBadge = document.getElementById("favCountBadge");
+    const favModal = document.getElementById("favModal");
+    const favList = document.getElementById("favList");
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightboxImg");
     const soundToggle = document.getElementById("soundToggle");
     const jarGlow = document.getElementById("jarGlow");
+    const pullDock = document.getElementById("pullDock");
+    const pullStickTip = document.getElementById("pullStickTip");
+
+    function checkAnniversary() {
+      const md = getMonthDayKey();
+      if (DATY_ROCZNIC.includes(md)) {
+        anniversaryBanner.classList.add("show");
+      } else {
+        anniversaryBanner.classList.remove("show");
+      }
+    }
 
     function initBgHearts() {
       const container = document.getElementById("bgHearts");
@@ -746,42 +1174,47 @@
       osc.stop(t + 0.08);
     }
 
-    function playRevealChime() {
+    function playRevealChime(isGolden = false) {
       if (!soundEnabled) return;
       const ctx = getAudioCtx();
       if (!ctx) return;
 
-      const notes = [523.25, 659.25, 783.99, 1046.5];
+      const notes = isGolden
+        ? [523.25, 659.25, 783.99, 1046.5, 1318.51]
+        : [523.25, 659.25, 783.99, 1046.5];
+
       notes.forEach((freq, idx) => {
         const t = ctx.currentTime + idx * 0.065;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = "sine";
+        osc.type = isGolden ? "triangle" : "sine";
         osc.frequency.setValueAtTime(freq, t);
 
         gain.gain.setValueAtTime(0.001, t);
-        gain.gain.linearRampToValueAtTime(0.12, t + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+        gain.gain.linearRampToValueAtTime(isGolden ? 0.15 : 0.12, t + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
 
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(t);
-        osc.stop(t + 0.45);
+        osc.stop(t + 0.48);
       });
     }
 
-    function spawnParticles(targetEl) {
+    function spawnParticles(targetEl, isGolden = false) {
       const rect = targetEl.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
-      const emojis = ["❤️", "💖", "✨", "🥰", "💕"];
+      const emojis = isGolden
+        ? ["✨", "💛", "🌟", "👑", "🎟️"]
+        : ["❤️", "💖", "✨", "🥰", "💕"];
 
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 14; i++) {
         const p = document.createElement("div");
         p.className = "particle";
         p.textContent = emojis[i % emojis.length];
-        const angle = (Math.PI * 2 * i) / 12 + (Math.random() - 0.5) * 0.4;
-        const dist = 65 + Math.random() * 85;
+        const angle = (Math.PI * 2 * i) / 14 + (Math.random() - 0.5) * 0.4;
+        const dist = 65 + Math.random() * 90;
         p.style.left = `${cx}px`;
         p.style.top = `${cy}px`;
         p.style.setProperty("--tx", `${Math.cos(angle) * dist}px`);
@@ -792,16 +1225,110 @@
       }
     }
 
-    function hideAllResults() {
-      photoCard.classList.remove("active", "visible");
-      stickWrapper.classList.remove("active", "visible");
+    function isFavorite(item) {
+      if (!item) return false;
+      return favorites.some(f => f.type === item.type && f.value === item.value);
     }
 
-    function showStickOnly(message, animate = true) {
+    function updateFavActionBtn() {
+      if (!currentDisplayedItem) {
+        favActionBtn.classList.remove("show");
+        return;
+      }
+      favActionBtn.classList.add("show");
+      const saved = isFavorite(currentDisplayedItem);
+      favActionBtn.classList.toggle("saved", saved);
+      favActionBtn.textContent = saved ? "❤️ W ulubionych" : "🤍 Zapisz w ulubionych";
+    }
+
+    function updateFavHeaderBadge() {
+      favCountBadge.textContent = favorites.length > 0 ? `(${favorites.length})` : "";
+    }
+
+    function toggleCurrentFavorite() {
+      if (!currentDisplayedItem) return;
+      const idx = favorites.findIndex(
+        f => f.type === currentDisplayedItem.type && f.value === currentDisplayedItem.value
+      );
+      if (idx >= 0) {
+        favorites.splice(idx, 1);
+      } else {
+        favorites.unshift({
+          type: currentDisplayedItem.type,
+          value: currentDisplayedItem.value
+        });
+        playWoodTap(0, 440);
+      }
+      localStorage.setItem(STORAGE_FAVS_KEY, JSON.stringify(favorites));
+      updateFavActionBtn();
+      updateFavHeaderBadge();
+    }
+
+    function renderFavoritesList() {
+      favList.innerHTML = "";
+      if (favorites.length === 0) {
+        favList.innerHTML = `<div class="fav-empty">Nie zapisałaś jeszcze żadnego patyczka ani zdjęcia.<br>Kliknij serduszko pod wylosowaną niespodzianką! 💕</div>`;
+        return;
+      }
+
+      favorites.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "fav-item" + (item.type === "golden" ? " golden" : "");
+
+        const content = document.createElement("div");
+        content.className = "fav-item-content";
+
+        if (item.type === "photo") {
+          const img = document.createElement("img");
+          img.className = "fav-thumb";
+          img.src = item.value;
+          img.alt = "Ulubione zdjęcie";
+          img.addEventListener("click", () => {
+            lightboxImg.src = item.value;
+            lightbox.classList.add("open");
+          });
+          const label = document.createElement("div");
+          label.className = "fav-item-text";
+          label.textContent = "Nasze wspólne zdjęcie ❤️";
+          content.appendChild(img);
+          content.appendChild(label);
+        } else {
+          const text = document.createElement("div");
+          text.className = "fav-item-text";
+          text.textContent = item.value;
+          content.appendChild(text);
+        }
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "fav-del-btn";
+        delBtn.textContent = "✕";
+        delBtn.title = "Usuń z ulubionych";
+        delBtn.addEventListener("click", () => {
+          favorites.splice(index, 1);
+          localStorage.setItem(STORAGE_FAVS_KEY, JSON.stringify(favorites));
+          renderFavoritesList();
+          updateFavActionBtn();
+          updateFavHeaderBadge();
+        });
+
+        row.appendChild(content);
+        row.appendChild(delBtn);
+        favList.appendChild(row);
+      });
+    }
+
+    function hideAllResults() {
       photoCard.classList.remove("active", "visible");
+      stickWrapper.classList.remove("active", "visible", "is-golden");
+      favActionBtn.classList.remove("show");
+    }
+
+    function showStickOnly(message, isGolden = false, animate = true) {
+      photoCard.classList.remove("active", "visible");
+      stickWrapper.classList.toggle("is-golden", isGolden);
       stickText.textContent = message;
       stickText.classList.toggle("long-text", message.length > 34);
-      const tilt = (Math.random() * 3.6 - 1.8).toFixed(2);
+      const tilt = (Math.random() * 3.4 - 1.7).toFixed(2);
       stickWrapper.classList.add("active");
 
       if (animate) {
@@ -816,10 +1343,11 @@
         stickWrapper.classList.add("visible");
         stickWrapper.style.transform = `translateY(0) scale(1) rotate(${tilt}deg)`;
       }
+      updateFavActionBtn();
     }
 
     function showPhotoOnly(src, animate = true) {
-      stickWrapper.classList.remove("active", "visible");
+      stickWrapper.classList.remove("active", "visible", "is-golden");
       const tilt = (Math.random() * 4 - 2).toFixed(2);
 
       const loader = new Image();
@@ -839,27 +1367,34 @@
           photoCard.classList.add("visible");
           photoCard.style.transform = `translateY(0) scale(1) rotate(${tilt}deg)`;
         }
+        updateFavActionBtn();
       };
       loader.onerror = () => {
-        // Awaryjnie pokaż losowy patyczek tekstowy, jeśli plik zdjęcia nie został jeszcze wgrany
         const fallback = PATYCZKI[Math.floor(Math.random() * PATYCZKI.length)];
-        showStickOnly(fallback, animate);
+        currentDisplayedItem = { type: "text", value: fallback };
+        showStickOnly(fallback, false, animate);
       };
       loader.src = src;
     }
 
     function renderItem(item, animate = true) {
       if (!item) return;
+      currentDisplayedItem = item;
       if (item.type === "photo") {
         showPhotoOnly(item.value, animate);
+      } else if (item.type === "golden") {
+        showStickOnly(item.value, true, animate);
       } else {
-        showStickOnly(item.value, animate);
+        showStickOnly(item.value, false, animate);
       }
     }
 
     function updateUI() {
+      checkAnniversary();
       dailyState = loadDailyState();
+      goldenMonthState = loadGoldenMonthState();
       soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
+      updateFavHeaderBadge();
 
       const leftToday = Math.max(0, LIMIT_DZIENNY - dailyState.count);
 
@@ -867,12 +1402,53 @@
         drawBtn.style.display = "none";
         dailyHint.style.display = "none";
         limitCard.classList.add("show");
+        pullDock.classList.add("hidden");
+        mainArea.classList.add("no-pull-pad");
       } else {
         drawBtn.style.display = "flex";
         dailyHint.style.display = "block";
         limitCard.classList.remove("show");
+        pullDock.classList.remove("hidden");
+        mainArea.classList.remove("no-pull-pad");
         const word = leftToday === 1 ? "losowanie" : "losowania";
         dailyHint.textContent = `Dziś pozostało: ${leftToday} z ${LIMIT_DZIENNY} ${word} 💕`;
+      }
+    }
+
+    function pickNextItem() {
+      goldenMonthState = loadGoldenMonthState();
+
+      // Dostępne złote kupony w bieżącym miesiącu
+      const availableGolden = [];
+      for (let i = 0; i < ZLOTE_KUPONY.length; i++) {
+        if (!goldenMonthState.drawn.includes(i)) availableGolden.push(i);
+      }
+
+      // Dostępne zwykłe patyczki i zdjęcia
+      let availableRegular = [];
+      for (let i = 0; i < PULA_ZWYKLA.length; i++) {
+        if (!drawnRegularIndices.includes(i)) availableRegular.push(i);
+      }
+      if (availableRegular.length === 0) {
+        drawnRegularIndices = [];
+        availableRegular = PULA_ZWYKLA.map((_, i) => i);
+      }
+
+      // Łączna pula ważona (dostępne złote kupony + pozostałe zwykłe losy)
+      const totalWeight = availableRegular.length + availableGolden.length;
+      const roll = Math.floor(Math.random() * totalWeight);
+
+      if (roll < availableGolden.length) {
+        const chosenGoldenIdx = availableGolden[roll];
+        goldenMonthState.drawn.push(chosenGoldenIdx);
+        localStorage.setItem(STORAGE_GOLDEN_MONTH, JSON.stringify(goldenMonthState));
+        return { type: "golden", value: ZLOTE_KUPONY[chosenGoldenIdx] };
+      } else {
+        const regRoll = roll - availableGolden.length;
+        const chosenRegIdx = availableRegular[regRoll];
+        drawnRegularIndices.push(chosenRegIdx);
+        localStorage.setItem(STORAGE_REGULAR_DRAWN, JSON.stringify(drawnRegularIndices));
+        return PULA_ZWYKLA[chosenRegIdx];
       }
     }
 
@@ -883,15 +1459,6 @@
       if (dailyState.count >= LIMIT_DZIENNY) {
         updateUI();
         return;
-      }
-
-      let available = [];
-      for (let i = 0; i < PULA.length; i++) {
-        if (!drawnIndices.includes(i)) available.push(i);
-      }
-      if (available.length === 0) {
-        drawnIndices = [];
-        available = PULA.map((_, i) => i);
       }
 
       isDrawing = true;
@@ -908,14 +1475,10 @@
       void stickWrapper.offsetWidth;
       stickWrapper.classList.add("drawing");
 
-      const chosenIndex = available[Math.floor(Math.random() * available.length)];
-      const chosenItem = PULA[chosenIndex];
+      const chosenItem = pickNextItem();
 
       setTimeout(() => {
         stickWrapper.classList.remove("drawing");
-
-        drawnIndices.push(chosenIndex);
-        localStorage.setItem(STORAGE_DRAWN_KEY, JSON.stringify(drawnIndices));
 
         dailyState = {
           date: getTodayKey(),
@@ -926,8 +1489,9 @@
 
         renderItem(chosenItem, true);
 
-        playRevealChime();
-        spawnParticles(chosenItem.type === "photo" ? photoCard : stickWrapper);
+        const isGold = chosenItem.type === "golden";
+        playRevealChime(isGold);
+        spawnParticles(chosenItem.type === "photo" ? photoCard : stickWrapper, isGold);
 
         drawBtn.classList.remove("shaking");
         jarGlow.classList.remove("pulse");
@@ -938,15 +1502,62 @@
       }, 680);
     }
 
+    // Obsługa gestu Swipe Up na wystającym patyczku u dołu ekranu
+    let touchStartY = 0;
+    let isPulling = false;
+
+    pullDock.addEventListener("touchstart", (e) => {
+      if (isDrawing || dailyState.count >= LIMIT_DZIENNY) return;
+      touchStartY = e.touches[0].clientY;
+      isPulling = true;
+      pullDock.classList.add("dragging");
+    }, { passive: true });
+
+    pullDock.addEventListener("touchmove", (e) => {
+      if (!isPulling) return;
+      const dy = e.touches[0].clientY - touchStartY;
+      if (dy < 0) {
+        const clamped = Math.max(-68, dy);
+        pullStickTip.style.transform = `translateY(${clamped}px)`;
+      }
+    }, { passive: true });
+
+    pullDock.addEventListener("touchend", (e) => {
+      if (!isPulling) return;
+      isPulling = false;
+      pullDock.classList.remove("dragging");
+      const endY = e.changedTouches[0].clientY;
+      const pulledUpDistance = touchStartY - endY;
+      pullStickTip.style.transform = "";
+
+      if (pulledUpDistance > 38) {
+        drawItem();
+      }
+    });
+
+    pullDock.addEventListener("click", () => {
+      if (!isDrawing && dailyState.count < LIMIT_DZIENNY) drawItem();
+    });
+
     drawBtn.addEventListener("click", drawItem);
+    favActionBtn.addEventListener("click", toggleCurrentFavorite);
+
+    openFavsBtn.addEventListener("click", () => {
+      renderFavoritesList();
+      favModal.classList.add("open");
+    });
+
+    closeFavsBtn.addEventListener("click", () => favModal.classList.remove("open"));
+    favModal.addEventListener("click", () => favModal.classList.remove("open"));
 
     photoCard.addEventListener("click", () => {
-      if (photoImg.src) lightbox.classList.add("open");
+      if (photoImg.src) {
+        lightboxImg.src = photoImg.src;
+        lightbox.classList.add("open");
+      }
     });
 
-    lightbox.addEventListener("click", () => {
-      lightbox.classList.remove("open");
-    });
+    lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
 
     soundToggle.addEventListener("click", () => {
       soundEnabled = !soundEnabled;
