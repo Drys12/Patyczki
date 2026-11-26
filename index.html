@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <!-- Konfiguracja widoku i pełnego ekranu dla iPhone (PWA / Safari) -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Patyczki ❤️">
-  <meta name="theme-color" content="#ffe4ee">
-  <!-- Opcjonalna ikona na ekran główny iPhone'a (jeśli dodasz plik ikona.png do repozytorium) -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Patyczki dla Ciebie ❤️</title>
+
+  <!-- Ustawienia PWA dla iPhone (tryb pełnoekranowy bez paska Safari) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Patyczki ❤️" />
+  <meta name="theme-color" content="#ffd6e5" />
   <link rel="apple-touch-icon" href="ikona.jpeg" />
 
-  <title>Słoik z Patyczkami ❤️</title>
-
-  <!-- Zaokrąglona, przyjazna czcionka z pełną obsługą polskich znaków -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Czcionka z pełnym wsparciem polskich znaków -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
-    /* ==========================================================================
-       ZMIENNE KOLORYSTYCZNE I RESET
-       ========================================================================== */
     :root {
       --bg-top: #ffe4ee;
       --bg-mid: #ffc8dd;
-      --bg-bottom: #ffafcc;
-      --pink-primary: #ff4d8d;
-      --pink-primary-dark: #e03574;
-      --pink-glow: rgba(255, 77, 141, 0.42);
-      --text-dark: #5c1d36;
-      --wood-light: #f6dec3;
-      --wood-mid: #ebd0b0;
-      --wood-dark: #d9b38c;
-      --wood-ink: #4a2314;
-      --glass-bg: rgba(255, 255, 255, 0.58);
-      --glass-border: rgba(255, 255, 255, 0.85);
+      --bg-bot: #ffafcc;
+      --accent: #e63973;
+      --accent-dark: #c92a60;
+      --wood-1: #f6dcb8;
+      --wood-2: #edd0a6;
+      --wood-3: #e2be8d;
+      --wood-border: #cfa46e;
+      --wood-text: #5c3a21;
     }
 
     * {
@@ -50,522 +43,508 @@
     html, body {
       width: 100%;
       height: 100%;
+      height: 100dvh;
       overflow: hidden;
-      font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(165deg, var(--bg-top) 0%, var(--bg-mid) 52%, var(--bg-bottom) 100%);
-      color: var(--text-dark);
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(160deg, var(--bg-top) 0%, var(--bg-mid) 52%, var(--bg-bot) 100%);
+      color: #6b213c;
     }
 
-    /* ==========================================================================
-       GŁÓWNY KONTENER Z UWZGLĘDNIENIEM SAFE-AREA IPHONE'A
-       ========================================================================== */
-    .app-shell {
-      position: relative;
-      width: 100%;
-      height: 100dvh;
+    body {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding-top: max(18px, env(safe-area-inset-top));
-      padding-bottom: max(24px, env(safe-area-inset-bottom));
-      padding-left: max(20px, env(safe-area-inset-left));
-      padding-right: max(20px, env(safe-area-inset-right));
-      z-index: 2;
+      padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 22px);
+      position: relative;
     }
 
-    /* ==========================================================================
-       TŁO Z DELIKATNYMI PŁYWAJĄCYMI SERDUSZKAMI
-       ========================================================================== */
-    .floating-hearts-layer {
+    /* Subtelne pływające serduszka w tle */
+    .bg-hearts {
       position: fixed;
       inset: 0;
       pointer-events: none;
       overflow: hidden;
-      z-index: 1;
+      z-index: 0;
     }
 
     .bg-heart {
       position: absolute;
       bottom: -40px;
-      opacity: 0;
+      font-size: 20px;
+      opacity: 0.25;
       animation: floatUp linear infinite;
-      filter: blur(0.3px);
     }
 
     @keyframes floatUp {
       0% {
-        transform: translateY(0) translateX(0) rotate(0deg) scale(0.8);
+        transform: translateY(0) rotate(0deg) scale(0.9);
         opacity: 0;
       }
       15% {
-        opacity: 0.48;
+        opacity: 0.28;
       }
       85% {
-        opacity: 0.42;
+        opacity: 0.22;
       }
       100% {
-        transform: translateY(-112vh) translateX(var(--drift, 20px)) rotate(25deg) scale(1.1);
+        transform: translateY(-110vh) rotate(25deg) scale(1.1);
         opacity: 0;
       }
     }
 
-    /* ==========================================================================
-       GÓRNY PASEK: LICZNIK ORAZ PRZEŁĄCZNIK DŹWIĘKU
-       ========================================================================== */
-    .top-bar {
+    /* Górny pasek (bez licznika, tylko przycisk dźwięku po prawej) */
+    header {
       width: 100%;
-      max-width: 460px;
       display: flex;
+      justify-content: flex-end;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 6px;
-      z-index: 10;
+      z-index: 2;
+      max-width: 440px;
     }
 
-    .counter-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1.5px solid var(--glass-border);
-      padding: 10px 18px;
-      border-radius: 999px;
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      box-shadow: 0 8px 20px rgba(214, 70, 122, 0.12);
-      transition: transform 0.25s ease;
-    }
-
-    .counter-pill.bump {
-      transform: scale(1.07);
-    }
-
-    .sound-btn {
-      width: 46px;
-      height: 46px;
+    .icon-btn {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      border: 1.5px solid var(--glass-border);
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: 17px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(214, 70, 122, 0.12);
-      transition: transform 0.18s ease, background 0.2s ease;
+      color: #8f2d52;
+      box-shadow: 0 4px 15px rgba(230, 57, 115, 0.12);
+      transition: transform 0.15s ease;
     }
 
-    .sound-btn:active {
-      transform: scale(0.9);
+    .icon-btn:active {
+      transform: scale(0.92);
     }
 
-    /* ==========================================================================
-       CENTRALNA SCENA: PRZYCISK "LOSUJ" I WYSUWANY DREWNIANY PATYCZEK
-       ========================================================================== */
-    .center-stage {
-      position: relative;
-      width: 100%;
-      max-width: 460px;
+    /* Główna strefa centralna */
+    main {
       flex: 1;
+      width: 100%;
+      max-width: 440px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 28px;
+      position: relative;
+      z-index: 2;
+      gap: 24px;
     }
 
-    /* Dekoracyjna ikona słoiczka / serduszka nad przyciskiem w stanie początkowym */
-    .jar-emblem {
+    /* Scena prezentacji zdjęcia i patyczka */
+    .stage {
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .jar-icon {
-      width: 84px;
-      height: 84px;
-      filter: drop-shadow(0 10px 18px rgba(224, 53, 116, 0.22));
-      animation: gentleBob 3.2s ease-in-out infinite;
-    }
-
-    @keyframes gentleBob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .subtitle-hint {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: rgba(92, 29, 54, 0.78);
-      text-align: center;
-    }
-
-    /* Główny duży różowy przycisk "Losuj" */
-    .draw-button {
+      justify-content: center;
       position: relative;
-      min-width: 220px;
-      padding: 22px 48px;
-      border-radius: 999px;
-      border: 3px solid rgba(255, 255, 255, 0.85);
-      background: linear-gradient(145deg, #ff669e 0%, var(--pink-primary) 55%, var(--pink-primary-dark) 100%);
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 1.65rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      box-shadow:
-        0 14px 30px var(--pink-glow),
-        inset 0 3px 6px rgba(255, 255, 255, 0.45);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
-      overflow: hidden;
-      z-index: 5;
+      gap: 18px;
+      min-height: 140px;
     }
 
-    .draw-button::after {
-      content: "";
+    .jar-glow {
       position: absolute;
-      top: -50%;
-      left: -60%;
-      width: 45%;
-      height: 200%;
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.35) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      transform: rotate(25deg);
-      animation: buttonShimmer 3.8s infinite;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 72%);
+      pointer-events: none;
+      transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
-    @keyframes buttonShimmer {
-      0% { left: -60%; }
-      35%, 100% { left: 135%; }
+    .jar-glow.pulse {
+      animation: glowPulse 0.7s ease-in-out infinite alternate;
     }
 
-    .draw-button:active:not(:disabled) {
-      transform: scale(0.94);
+    @keyframes glowPulse {
+      from { transform: scale(0.95); opacity: 0.7; }
+      to { transform: scale(1.22); opacity: 1; }
     }
 
-    .draw-button:disabled {
-      cursor: default;
+    /* Ramka Polaroid na wspólne zdjęcie */
+    .photo-card {
+      display: none;
+      background: #ffffff;
+      padding: 10px 10px 26px 10px;
+      border-radius: 16px;
+      box-shadow:
+        0 14px 30px rgba(138, 43, 77, 0.22),
+        0 2px 6px rgba(0, 0, 0, 0.06);
+      transform: scale(0.85) rotate(2deg);
+      opacity: 0;
+      transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 1.25, 0.36, 1);
+      cursor: zoom-in;
+      position: relative;
+      z-index: 2;
     }
 
-    /* Animacja potrząsania podczas losowania */
-    .is-shaking {
-      animation: shakeMotion 0.68s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+    .photo-card.has-photo {
+      display: block;
     }
 
-    @keyframes shakeMotion {
-      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-      12% { transform: translate3d(-8px, -2px, 0) rotate(-4deg); }
-      24% { transform: translate3d(9px, 2px, 0) rotate(4.5deg); }
-      36% { transform: translate3d(-10px, -1px, 0) rotate(-5deg); }
-      48% { transform: translate3d(10px, 1px, 0) rotate(5deg); }
-      60% { transform: translate3d(-7px, -2px, 0) rotate(-3.5deg); }
-      72% { transform: translate3d(7px, 2px, 0) rotate(3.5deg); }
-      84% { transform: translate3d(-4px, 0, 0) rotate(-1.5deg); }
+    .photo-card.visible {
+      opacity: 1;
+      transform: scale(1) rotate(2deg);
     }
 
-    /* ==========================================================================
-       DREWNIANY PATYCZEK (WYLOSOWANA WIADOMOŚĆ)
-       ========================================================================== */
+    .photo-card img {
+      width: 205px;
+      height: 205px;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+      background: #ffe4ee;
+    }
+
+    .photo-caption {
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #b5486e;
+      letter-spacing: 0.3px;
+    }
+
+    /* Drewniany patyczek */
     .stick-wrapper {
       width: 100%;
       display: none;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      perspective: 1000px;
-      z-index: 6;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(35px) scale(0.84) rotate(-4deg);
+      transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.22, 1.25, 0.36, 1);
+      z-index: 3;
     }
 
-    .stick-wrapper.visible {
+    .stick-wrapper.active {
       display: flex;
     }
 
-    .wooden-stick {
+    .stick-wrapper.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotate(-1.5deg);
+    }
+
+    .stick-wrapper.drawing {
+      display: flex;
+      animation: stickShuffle 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes stickShuffle {
+      0%   { opacity: 0.9; transform: translateY(16px) scale(0.85) rotate(-8deg); }
+      20%  { opacity: 1;   transform: translateY(-16px) scale(0.92) rotate(7deg); }
+      40%  { opacity: 1;   transform: translateY(10px) scale(0.95) rotate(-6deg); }
+      60%  { opacity: 1;   transform: translateY(-12px) scale(0.97) rotate(5deg); }
+      80%  { opacity: 1;   transform: translateY(6px) scale(0.99) rotate(-3deg); }
+      100% { opacity: 0;   transform: translateY(-20px) scale(0.9) rotate(0deg); }
+    }
+
+    .popsicle-stick {
       position: relative;
-      width: min(92vw, 410px);
-      min-height: 118px;
-      padding: 24px 38px;
+      width: 100%;
+      max-width: 365px;
+      min-height: 86px;
+      padding: 18px 34px;
       border-radius: 999px;
-      /* Realistyczna faktura drewna brzozowego z delikatnym usłojeniem */
       background:
         repeating-linear-gradient(
-          -3deg,
-          rgba(181, 131, 90, 0.07) 0px,
-          rgba(181, 131, 90, 0.07) 2px,
+          90deg,
+          rgba(185, 134, 75, 0.06) 0px,
+          rgba(185, 134, 75, 0.06) 2px,
           transparent 2px,
           transparent 9px
         ),
-        linear-gradient(180deg, var(--wood-light) 0%, var(--wood-mid) 55%, var(--wood-dark) 100%);
-      border: 2px solid #cfa378;
+        linear-gradient(180deg, var(--wood-1) 0%, var(--wood-2) 55%, var(--wood-3) 100%);
+      border: 2px solid var(--wood-border);
       box-shadow:
-        0 18px 36px rgba(92, 29, 54, 0.22),
-        0 5px 0 #b88758,
-        inset 0 3px 6px rgba(255, 255, 255, 0.72),
-        inset 0 -4px 8px rgba(139, 90, 43, 0.25);
+        0 14px 28px rgba(138, 43, 77, 0.22),
+        0 4px 0 #c5965d,
+        inset 0 2px 4px rgba(255, 255, 255, 0.75),
+        inset 0 -3px 6px rgba(168, 118, 62, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      cursor: pointer;
-      transform-origin: center bottom;
     }
 
-    /* Dekoracyjne kropki na końcach patyczka */
-    .wooden-stick::before,
-    .wooden-stick::after {
-      content: "♥";
+    .popsicle-stick::before,
+    .popsicle-stick::after {
+      content: "";
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.95rem;
-      color: rgba(138, 69, 44, 0.45);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(168, 118, 62, 0.22);
+      box-shadow: inset 0 1px 2px rgba(92, 58, 33, 0.25);
     }
 
-    .wooden-stick::before {
+    .popsicle-stick::before {
       left: 16px;
     }
 
-    .wooden-stick::after {
+    .popsicle-stick::after {
       right: 16px;
     }
 
     .stick-text {
-      font-size: clamp(1.18rem, 4.7vw, 1.45rem);
-      font-weight: 700;
-      line-height: 1.35;
-      color: var(--wood-ink);
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.3;
+      color: var(--wood-text);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
       word-break: break-word;
     }
 
-    /* Animacja wysuwania patyczka ze słoika */
-    .stick-slide-in {
-      animation: stickEmerge 0.65s cubic-bezier(0.22, 1.28, 0.36, 1) forwards;
+    .stick-text.long-text {
+      font-size: 17.5px;
     }
 
-    @keyframes stickEmerge {
-      0% {
-        opacity: 0;
-        transform: translateY(85px) scale(0.68) rotate(-8deg);
-      }
-      65% {
-        opacity: 1;
-        transform: translateY(-8px) scale(1.03) rotate(1.5deg);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1) rotate(0deg);
-      }
+    /* Strefa przycisku "Losuj" i limitu dziennego */
+    .controls-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
     }
 
-    /* Przycisk ponownego losowania pod patyczkiem */
-    .secondary-action-btn {
-      margin-top: 26px;
-      padding: 16px 34px;
+    .draw-btn {
+      position: relative;
+      min-width: 215px;
+      height: 74px;
+      padding: 0 44px;
+      border: none;
       border-radius: 999px;
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      background: linear-gradient(145deg, #ff669e 0%, var(--pink-primary) 100%);
-      color: #fff;
+      background: linear-gradient(180deg, #ff5c93 0%, var(--accent) 100%);
+      color: #ffffff;
       font-family: inherit;
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      box-shadow: 0 10px 24px var(--pink-glow);
-      transition: transform 0.18s ease, opacity 0.2s ease;
+      box-shadow:
+        0 12px 26px rgba(230, 57, 115, 0.38),
+        0 5px 0 var(--accent-dark),
+        inset 0 2px 3px rgba(255, 255, 255, 0.45);
+      transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
     }
 
-    .secondary-action-btn:active {
-      transform: scale(0.94);
+    .draw-btn:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow:
+        0 6px 14px rgba(230, 57, 115, 0.32),
+        0 1px 0 var(--accent-dark),
+        inset 0 2px 3px rgba(255, 255, 255, 0.35);
     }
 
-    /* ==========================================================================
-       EKRAN WYCZERPANIA PULI (WSZYSTKIE 53 PATYCZKI WYLOSOWANE)
-       ========================================================================== */
-    .empty-jar-card {
+    .draw-btn:disabled {
+      cursor: default;
+      filter: saturate(0.85);
+    }
+
+    .draw-btn.shaking {
+      animation: btnShake 0.65s ease-in-out;
+    }
+
+    @keyframes btnShake {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      15% { transform: scale(1.05) rotate(-4deg); }
+      30% { transform: scale(1.05) rotate(4deg); }
+      45% { transform: scale(1.05) rotate(-4deg); }
+      60% { transform: scale(1.05) rotate(4deg); }
+      75% { transform: scale(1.03) rotate(-2deg); }
+    }
+
+    .daily-hint {
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #8f2d52;
+    }
+
+    /* Komunikat po wykorzystaniu 3 patyczków na dziś */
+    .limit-card {
       display: none;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 18px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 2px solid var(--glass-border);
-      border-radius: 32px;
-      padding: 30px 24px;
-      box-shadow: 0 16px 36px rgba(214, 70, 122, 0.18);
-      animation: stickEmerge 0.55s ease forwards;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 255, 255, 0.92);
+      border-radius: 24px;
+      padding: 16px 22px;
+      box-shadow: 0 10px 26px rgba(230, 57, 115, 0.16);
+      max-width: 340px;
+      gap: 4px;
     }
 
-    .empty-jar-card.visible {
+    .limit-card.show {
+      display: flex;
+      animation: popIn 0.4s cubic-bezier(0.22, 1.25, 0.36, 1);
+    }
+
+    .limit-card strong {
+      font-size: 16px;
+      font-weight: 900;
+      color: #c92a60;
+    }
+
+    .limit-card span {
+      font-size: 14px;
+      font-weight: 700;
+      color: #7d2244;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Podgląd zdjęcia na pełnym ekranie po kliknięciu */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 12, 25, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 50;
+      cursor: zoom-out;
+    }
+
+    .lightbox.open {
       display: flex;
     }
 
-    .empty-jar-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--text-dark);
+    .lightbox img {
+      max-width: 100%;
+      max-height: 82dvh;
+      border-radius: 18px;
+      border: 6px solid #ffffff;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      object-fit: contain;
     }
 
-    .empty-jar-desc {
-      font-size: 1rem;
-      font-weight: 600;
-      line-height: 1.45;
-      color: rgba(92, 29, 54, 0.85);
-    }
-
-    .reset-btn {
-      padding: 16px 28px;
-      border-radius: 999px;
-      border: 2px solid #fff;
-      background: linear-gradient(145deg, #ff669e 0%, var(--pink-primary) 100%);
-      color: #fff;
-      font-family: inherit;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 10px 24px var(--pink-glow);
-      transition: transform 0.18s ease;
-    }
-
-    .reset-btn:active {
-      transform: scale(0.94);
-    }
-
-    /* ==========================================================================
-       WARSTWA ROZBŁYSKU SERDUSZEK (PARTICLES)
-       ========================================================================== */
-    .burst-layer {
+    /* Cząsteczki po wylosowaniu */
+    .particle {
       position: fixed;
-      inset: 0;
       pointer-events: none;
+      font-size: 22px;
       z-index: 20;
-      overflow: hidden;
+      animation: burst 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .burst-heart {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      font-size: 1.5rem;
-      will-change: transform, opacity;
-      pointer-events: none;
+    @keyframes burst {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.5);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(var(--rot));
+      }
     }
 
-    /* Dyskretna stopka */
-    .footer-note {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: rgba(92, 29, 54, 0.55);
-      text-align: center;
-      letter-spacing: 0.3px;
+    /* Mniejsze ekrany */
+    @media (max-height: 700px) {
+      .photo-card img {
+        width: 165px;
+        height: 165px;
+      }
+      main {
+        gap: 16px;
+      }
+      .draw-btn {
+        height: 64px;
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Tło z pływającymi serduszkami -->
-  <div class="floating-hearts-layer" id="floatingHearts" aria-hidden="true"></div>
+  <div class="bg-hearts" id="bgHearts"></div>
 
-  <!-- Warstwa rozbłysku serduszek po wylosowaniu patyczka -->
-  <div class="burst-layer" id="burstLayer" aria-hidden="true"></div>
+  <header>
+    <button class="icon-btn" id="soundToggle" aria-label="Dźwięk" title="Włącz/wyłącz dźwięk">🔊</button>
+  </header>
 
-  <!-- Główny widok aplikacji -->
-  <main class="app-shell">
-    <!-- Górny pasek z licznikiem oraz przełącznikiem dźwięku -->
-    <header class="top-bar">
-      <div class="counter-pill" id="counterPill" aria-live="polite">
-        <span>🫙</span>
-        <span id="counterText">W słoiku: 53 / 53</span>
+  <main>
+    <div class="stage" id="stage">
+      <div class="jar-glow" id="jarGlow"></div>
+
+      <!-- Wspólne zdjęcie w stylu Polaroid (pojawi się automatycznie, gdy dodasz pliki do listy ZDJECIA) -->
+      <div class="photo-card" id="photoCard" title="Kliknij, aby powiększyć">
+        <img id="photoImg" src="" alt="Nasze wspólne zdjęcie ❤️" />
+        <div class="photo-caption">My ❤️</div>
       </div>
 
-      <button
-        type="button"
-        class="sound-btn"
-        id="soundToggleBtn"
-        aria-label="Przełącz dźwięk"
-        title="Dźwięk"
-      >
-        🔊
-      </button>
-    </header>
-
-    <!-- Centralna część ekranu -->
-    <section class="center-stage">
-      <!-- Stan 1: Ekran startowy z centralnym przyciskiem "Losuj" -->
-      <div id="startView" style="display: flex; flex-direction: column; align-items: center; gap: 22px;">
-        <div class="jar-emblem" id="jarEmblem">
-          <!-- Ilustracja uroczego słoiczka ze SVG -->
-          <svg class="jar-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- Zakrętka -->
-            <rect x="28" y="12" width="44" height="11" rx="5.5" fill="#ff7aa8" stroke="#ffffff" stroke-width="2.5"/>
-            <!-- Wystające końcówki patyczków -->
-            <rect x="36" y="21" width="7" height="22" rx="3.5" transform="rotate(-14 36 21)" fill="#ebd0b0" stroke="#cfa378" stroke-width="1.5"/>
-            <rect x="48" y="19" width="7" height="24" rx="3.5" transform="rotate(6 48 19)" fill="#f6dec3" stroke="#cfa378" stroke-width="1.5"/>
-            <rect x="57" y="21" width="7" height="22" rx="3.5" transform="rotate(18 57 21)" fill="#d9b38c" stroke="#cfa378" stroke-width="1.5"/>
-            <!-- Szklany korpus słoika -->
-            <rect x="20" y="24" width="60" height="64" rx="20" fill="rgba(255, 255, 255, 0.68)" stroke="#ffffff" stroke-width="3"/>
-            <!-- Serduszko na słoiku -->
-            <path d="M50 67C50 67 34 56.5 34 46.5C34 41.8 37.8 38 42.5 38C45.3 38 47.9 39.4 50 41.7C52.1 39.4 54.7 38 57.5 38C62.2 38 66 41.8 66 46.5C66 56.5 50 67 50 67Z" fill="#ff4d8d"/>
-          </svg>
-          <p class="subtitle-hint">Kliknij i wyciągnij swój patyczek 💕</p>
+      <!-- Drewniany patyczek z wiadomością -->
+      <div class="stick-wrapper" id="stickWrapper">
+        <div class="popsicle-stick">
+          <div class="stick-text" id="stickText">Kocham Cię! ❤️</div>
         </div>
-
-        <button type="button" class="draw-button" id="drawBtn">
-          Losuj
-        </button>
       </div>
+    </div>
 
-      <!-- Stan 2: Wylosowany drewniany patyczek -->
-      <div class="stick-wrapper" id="stickView">
-        <div class="wooden-stick" id="woodenStick" role="button" tabindex="0" aria-label="Wylosowany patyczek">
-          <p class="stick-text" id="stickText"></p>
-        </div>
+    <div class="controls-wrap">
+      <button class="draw-btn" id="drawBtn">Losuj</button>
+      <div class="daily-hint" id="dailyHint">Dziś pozostało: 3 z 3 losowań 💕</div>
 
-        <button type="button" class="secondary-action-btn" id="drawAnotherBtn">
-          Losuj kolejny ✨
-        </button>
+      <div class="limit-card" id="limitCard">
+        <strong>Wykorzystałaś już 3 patyczki na dziś 🥰</strong>
+        <span>Wróć jutro po kolejną porcję miłości! ❤️</span>
       </div>
-
-      <!-- Stan 3: Wszystkie 53 patyczki zostały już wylosowane -->
-      <div class="empty-jar-card" id="emptyJarView">
-        <div style="font-size: 3rem;">🥹💖</div>
-        <h2 class="empty-jar-title">Słoiczek jest już pusty!</h2>
-        <p class="empty-jar-desc">
-          Wylosowałaś wszystkie 53 wiadomości pełne miłości. Chcesz włożyć patyczki z powrotem i losować od nowa?
-        </p>
-        <button type="button" class="reset-btn" id="resetJarBtn">
-          Włóż patyczki z powrotem 🔄
-        </button>
-      </div>
-    </section>
-
-    <!-- Dyskretna stopka -->
-    <footer class="footer-note">
-      Stworzone specjalnie dla Ciebie ❤️
-    </footer>
+    </div>
   </main>
 
+  <!-- Powiększenie zdjęcia po kliknięciu -->
+  <div class="lightbox" id="lightbox">
+    <img id="lightboxImg" src="" alt="Powiększone zdjęcie ❤️" />
+  </div>
+
   <script>
-    /**
-     * ==========================================================================
-     * LISTA DOKŁADNIE 53 WIADOMOŚCI NA PATYCZKACH
-     * ==========================================================================
-     */
+    // =========================================================================
+    // 1. WASZE WSPÓLNE ZDJĘCIA
+    // Wgraj Wasze zdjęcia na GitHuba (do tego samego folderu co index.html)
+    // i dopisz ich dokładne nazwy plików poniżej (w cudzysłowach, po przecinku):
+    // =========================================================================
+    const ZDJECIA = [
+      // "zdjecie1.jpg",
+      // "zdjecie2.jpg",
+      // "zdjecie3.jpeg"
+    ];
+
+    // =========================================================================
+    // 2. LISTA WSZYSTKICH 102 PATYCZKÓW
+    // =========================================================================
     const PATYCZKI = [
       "Kocham Cię! ❤️",
       "Smacznego, Skarbie! 😋🍴",
@@ -573,19 +552,19 @@
       "Jestem z Ciebie dumny! 🥹❤️",
       "Jesteś moim szczęściem! 🍀",
       "Pięknie dziś wyglądasz! 😍",
-      "Ze wszystkim sobie damy rade! 🫂",
+      "Pamiętaj, że zawsze masz mnie! 🫂",
       "Jesteś moją ulubioną osobą! 🥰",
       "Razem możemy wszystko! 💪❤️",
-      "Uśmiechnij się Kotku! 😊",
+      "Uśmiechnij się, Kochanie! 😊",
       "Jesteś cudowną żoną! 💍",
       "Wierzę w Ciebie! 🤞",
-      "Sa ra ye! Miłość na zawsze! 🤙 😘",
+      "Buziak dla Ciebie! 😘",
       "Dzisiaj będzie dobry dzień! ☀️",
       "Jesteś moim całym światem! 🌍❤️",
       "Dziękuję, że jesteś! 🫶",
       "Nasze małżeństwo = NASZA SIŁA! 💍",
       "Zasługujesz na wszystko, co najlepsze! 👑",
-      "Jesteś najpiękniejsza bez makijażu! 🌸",
+      "Jesteś piękna bez makijażu! 🌸",
       "Uwielbiam Twój uśmiech! 😍",
       "Z Tobą wszystko jest lepsze! 👫",
       "Pamiętaj o odpoczynku! 🧸",
@@ -619,435 +598,381 @@
       "W każdym życiu wybrałbym Ciebie! ♾️❤️",
       "Zjedz coś dobrego 💋",
       "Dziękuję, że jesteś! 👩‍❤️‍👨",
-      "Jesteś najdzielniejszą osobą na świecie! 🥰"
+      "Jesteś najdzielniejszą osobą na świecie! 🥰",
+      "Dzień dobry, moja Księżniczko! 👑☀️",
+      "Jak się dzisiaj czujesz, Kochanie? Napisz mi 🥰",
+      "Pamiętaj, że jesteś wyjątkowa! ✨",
+      "Ale z Ciebie piękna Kobitka! 😍",
+      "Ktoś tu bardzo mocno Cię kocha! 🤭❤️",
+      "Jesteś moim promyczkiem słońca! 🌞",
+      "Nie zapomnij o śniadaniu! 🥪",
+      "Mam nadzieję, że dzisiaj dużo się uśmiechasz! 😊",
+      "Zgadnij, kto o Tobie myśli? 😏",
+      "Słodzinka!",
+      "O której wracasz do swojego przystojniaka? 😎",
+      "Jesteś moją ulubioną psycholożką! 🧠❤️",
+      "Nie stresuj się tym, na co nie masz wpływu! 🌿",
+      "Jesteś cudownym człowiekiem! 🥹",
+      "Dzisiaj też dasz sobie radę! 💪",
+      "Pamiętaj, że odpoczynek to nie lenistwo! 🦥",
+      "Nikt nie przytula tak dobrze jak Ty! 🫂",
+      "Jesteś moim małym szczęściem! 🐻❤️",
+      "Czy mówiłem Ci już dzisiaj, że Cię kocham? 💌",
+      "Nie mogę się doczekać naszych kolejnych podróży! ✈️",
+      "Uwielbiam budzić się obok Ciebie! 🛌❤️",
+      "Moja żona jest najpiękniejsza na świecie! 🌍",
+      "Nie bądź dla siebie zbyt surowa! 🌷",
+      "Jesteś piękniejsza niż zachód słońca! 🌅",
+      "Dziękuję za wszystkie nasze wspólne chwile! 💞",
+      "Mam nadzieję, że nikt Cię dzisiaj nie denerwuje! 🙄",
+      "A może dzisiaj zamówimy pizzę? 🍕",
+      "Jesteś moją ulubioną towarzyszką przygód! 🗺️",
+      "Dzisiaj też możesz być z siebie dumna! 🏆",
+      "Pamiętaj, że nie musisz wszystkiego robić sama! 🫶",
+      "Jak to jest być taką ślicznotką? 😍",
+      "Masz dzisiaj ochotę na przytulaski? 🐨",
+      "Niech moc będzie z Tobą! ⚔️",
+      "Twój mąż przesyła całuski! 💋",
+      "Jesteś moim ulubionym powodem do uśmiechu! 😊",
+      "Nawet poniedziałki są z Tobą fajne! 😂",
+      "Zrobiłaś już dzisiaj coś dla siebie? 🌸",
+      "Mam najlepszą żonę w całej galaktyce! 🪐",
+      "Jesteś moją najpiękniejszą historią! 📖❤️",
+      "Jak tam moja karateczka? 🥋",
+      "Kocham Cię bardziej niż PlayStation! 🎮❤️",
+      "Pamiętaj, żeby się ciepło ubrać! 🧣",
+      "Czas na małą przerwę, Kochanie! ☕",
+      "Masz ochotę na wspólny wieczór pod kocykiem? 🍿",
+      "Uwielbiam Twój śmiech! 😂❤️",
+      "Przy Tobie czuję się jak w domu! 🏡",
+      "Jesteś moim ulubionym powiadomieniem na telefonie! 📱❤️",
+      "Jeszcze tyle pięknych chwil przed nami! ✨",
+      "Jak dobrze, że nasze drogi się spotkały! 💍❤️"
     ];
 
-    /**
-     * ==========================================================================
-     * KLUCZE LOCALSTORAGE I STAN APLIKACJI
-     * ==========================================================================
-     */
-    const STORAGE_KEY_DRAWN = "sloik_patyczki_wylosowane_v1";
-    const STORAGE_KEY_SOUND = "sloik_patyczki_dzwiek_v1";
+    const LIMIT_DZIENNY = 3;
+    const STORAGE_DRAWN_KEY = "patyczki_wylosowane_v2";
+    const STORAGE_PHOTOS_KEY = "patyczki_zdjecia_v2";
+    const STORAGE_DAILY_KEY = "patyczki_dzis_v2";
+    const SOUND_KEY = "patyczki_dzwiek_v1";
 
-    let drawnIndices = [];
-    let soundEnabled = true;
-    let isAnimating = false;
+    // Zwraca dzisiejszą datę w lokalnej strefie czasowej (np. "2026-11-26")
+    function getTodayKey() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
 
-    // Referencje do elementów DOM
-    const counterPill = document.getElementById("counterPill");
-    const counterText = document.getElementById("counterText");
-    const soundToggleBtn = document.getElementById("soundToggleBtn");
-    const startView = document.getElementById("startView");
-    const jarEmblem = document.getElementById("jarEmblem");
+    let drawnIndices = JSON.parse(localStorage.getItem(STORAGE_DRAWN_KEY) || "[]")
+      .filter(i => Number.isInteger(i) && i >= 0 && i < PATYCZKI.length);
+
+    let drawnPhotos = JSON.parse(localStorage.getItem(STORAGE_PHOTOS_KEY) || "[]")
+      .filter(i => Number.isInteger(i) && i >= 0 && i < ZDJECIA.length);
+
+    function loadDailyState() {
+      const today = getTodayKey();
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_DAILY_KEY) || "null");
+        if (saved && saved.date === today) {
+          return {
+            date: today,
+            count: Math.min(LIMIT_DZIENNY, Math.max(0, Number(saved.count) || 0)),
+            lastMessage: saved.lastMessage || "",
+            lastPhoto: saved.lastPhoto || ""
+          };
+        }
+      } catch (e) {}
+      return { date: today, count: 0, lastMessage: "", lastPhoto: "" };
+    }
+
+    let dailyState = loadDailyState();
+    let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
+    let isDrawing = false;
+
     const drawBtn = document.getElementById("drawBtn");
-    const stickView = document.getElementById("stickView");
-    const woodenStick = document.getElementById("woodenStick");
+    const dailyHint = document.getElementById("dailyHint");
+    const limitCard = document.getElementById("limitCard");
+    const stickWrapper = document.getElementById("stickWrapper");
     const stickText = document.getElementById("stickText");
-    const drawAnotherBtn = document.getElementById("drawAnotherBtn");
-    const emptyJarView = document.getElementById("emptyJarView");
-    const resetJarBtn = document.getElementById("resetJarBtn");
-    const burstLayer = document.getElementById("burstLayer");
-    const floatingHearts = document.getElementById("floatingHearts");
+    const photoCard = document.getElementById("photoCard");
+    const photoImg = document.getElementById("photoImg");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+    const soundToggle = document.getElementById("soundToggle");
+    const jarGlow = document.getElementById("jarGlow");
 
-    /**
-     * ==========================================================================
-     * SILNIK DŹWIĘKU OPARTY NA WEB AUDIO API (BEZ ZEWNĘTRZNYCH PLIKÓW)
-     * ==========================================================================
-     */
-    class SoundEngine {
-      constructor() {
-        this.ctx = null;
-      }
-
-      init() {
-        if (!this.ctx) {
-          const AudioCtx = window.AudioContext || window.webkitAudioContext;
-          if (AudioCtx) {
-            this.ctx = new AudioCtx();
-          }
-        }
-        if (this.ctx && this.ctx.state === "suspended") {
-          this.ctx.resume().catch(() => {});
-        }
-      }
-
-      // Delikatne stukanie drewnianych patyczków podczas potrząsania
-      playWoodRattle() {
-        if (!soundEnabled) return;
-        this.init();
-        if (!this.ctx) return;
-
-        const tapOffsets = [0, 0.11, 0.22, 0.34, 0.46, 0.57];
-        tapOffsets.forEach((offset, idx) => {
-          const now = this.ctx.currentTime + offset;
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-
-          osc.type = "triangle";
-          const baseFreq = 260 + (idx % 3) * 55;
-          osc.frequency.setValueAtTime(baseFreq, now);
-          osc.frequency.exponentialRampToValueAtTime(110, now + 0.055);
-
-          gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.14, now + 0.008);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-
-          osc.start(now);
-          osc.stop(now + 0.065);
-        });
-      }
-
-      // Ciepły, magiczny akord przy odkryciu wiadomości
-      playRevealChime() {
-        if (!soundEnabled) return;
-        this.init();
-        if (!this.ctx) return;
-
-        // Nuty C5, E5, G5, B5, D6 (romantyczny akord Cmaj9)
-        const notes = [523.25, 659.25, 783.99, 987.77, 1174.66];
-        notes.forEach((freq, i) => {
-          const start = this.ctx.currentTime + i * 0.065;
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, start);
-
-          gain.gain.setValueAtTime(0.001, start);
-          gain.gain.linearRampToValueAtTime(0.12, start + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.0008, start + 0.85);
-
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-
-          osc.start(start);
-          osc.stop(start + 0.9);
-        });
-      }
-
-      // Dźwięk ponownego napełnienia słoika
-      playResetSound() {
-        if (!soundEnabled) return;
-        this.init();
-        if (!this.ctx) return;
-
-        const notes = [440, 554.37, 659.25, 880];
-        notes.forEach((freq, i) => {
-          const start = this.ctx.currentTime + i * 0.055;
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, start);
-
-          gain.gain.setValueAtTime(0.001, start);
-          gain.gain.linearRampToValueAtTime(0.1, start + 0.015);
-          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.45);
-
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-
-          osc.start(start);
-          osc.stop(start + 0.5);
-        });
-      }
-    }
-
-    const sound = new SoundEngine();
-
-    /**
-     * ==========================================================================
-     * OBSŁUGA LOCALSTORAGE (Z ZABEZPIECZENIEM TRY/CATCH)
-     * ==========================================================================
-     */
-    function loadState() {
-      try {
-        const savedDrawn = localStorage.getItem(STORAGE_KEY_DRAWN);
-        if (savedDrawn) {
-          const parsed = JSON.parse(savedDrawn);
-          if (Array.isArray(parsed)) {
-            // Filtrujemy tylko poprawne indeksy z zakresu 0..52
-            drawnIndices = parsed.filter(
-              (idx) => Number.isInteger(idx) && idx >= 0 && idx < PATYCZKI.length
-            );
-          }
-        }
-
-        const savedSound = localStorage.getItem(STORAGE_KEY_SOUND);
-        if (savedSound !== null) {
-          soundEnabled = savedSound === "true";
-        }
-      } catch (e) {
-        drawnIndices = [];
-      }
-    }
-
-    function saveState() {
-      try {
-        localStorage.setItem(STORAGE_KEY_DRAWN, JSON.stringify(drawnIndices));
-        localStorage.setItem(STORAGE_KEY_SOUND, String(soundEnabled));
-      } catch (e) {
-        // Ignorujemy błędy np. w trybie prywatnym Safari
-      }
-    }
-
-    /**
-     * ==========================================================================
-     * GENEROWANIE PŁYWAJĄCYCH SERDUSZEK W TLE
-     * ==========================================================================
-     */
-    function createBackgroundHearts() {
-      const heartSymbols = ["❤️", "💕", "💗", "💖", "🌸"];
-      const count = 18;
-
-      for (let i = 0; i < count; i++) {
-        const el = document.createElement("span");
+    // Subtelne pływające serduszka w tle
+    function initBgHearts() {
+      const container = document.getElementById("bgHearts");
+      const icons = ["💗", "💖", "💕", "🌸", "✨"];
+      for (let i = 0; i < 14; i++) {
+        const el = document.createElement("div");
         el.className = "bg-heart";
-        el.textContent = heartSymbols[i % heartSymbols.length];
-
-        const leftPos = Math.random() * 100;
-        const size = 14 + Math.random() * 18;
-        const duration = 11 + Math.random() * 12;
-        const delay = -(Math.random() * 20);
-        const drift = (Math.random() - 0.5) * 70;
-
-        el.style.left = `${leftPos}%`;
-        el.style.fontSize = `${size}px`;
-        el.style.animationDuration = `${duration}s`;
-        el.style.animationDelay = `${delay}s`;
-        el.style.setProperty("--drift", `${drift}px`);
-
-        floatingHearts.appendChild(el);
+        el.textContent = icons[i % icons.length];
+        el.style.left = `${Math.random() * 94 + 3}%`;
+        el.style.animationDuration = `${11 + Math.random() * 10}s`;
+        el.style.animationDelay = `${-Math.random() * 15}s`;
+        el.style.fontSize = `${15 + Math.random() * 12}px`;
+        container.appendChild(el);
       }
     }
 
-    /**
-     * ==========================================================================
-     * EFEKT ROZBŁYSKU SERDUSZEK PRZY WYLOSOWANIU
-     * ==========================================================================
-     */
-    function triggerHeartBurst() {
-      const emojis = ["❤️", "💖", "💕", "💗", "✨", "🥰"];
-      const total = 26;
+    // Dźwięki generowane przez Web Audio API
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
 
-      for (let i = 0; i < total; i++) {
-        const particle = document.createElement("span");
-        particle.className = "burst-heart";
-        particle.textContent = emojis[i % emojis.length];
+    function playWoodTap(delay = 0, freq = 260) {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
 
-        const angle = (Math.PI * 2 * i) / total + (Math.random() - 0.5) * 0.35;
-        const distance = 95 + Math.random() * 165;
-        const destX = Math.cos(angle) * distance;
-        const destY = Math.sin(angle) * distance - 25;
-        const rotation = (Math.random() - 0.5) * 90;
-        const scale = 0.75 + Math.random() * 0.75;
+      const t = ctx.currentTime + delay;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.exponentialRampToValueAtTime(110, t + 0.06);
 
-        burstLayer.appendChild(particle);
+      gain.gain.setValueAtTime(0.14, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
 
-        const anim = particle.animate(
-          [
-            {
-              transform: "translate(-50%, -50%) scale(0.2) rotate(0deg)",
-              opacity: 1
-            },
-            {
-              transform: `translate(calc(-50% + ${destX * 0.75}px), calc(-50% + ${destY * 0.75}px)) scale(${scale}) rotate(${rotation * 0.6}deg)`,
-              opacity: 1,
-              offset: 0.65
-            },
-            {
-              transform: `translate(calc(-50% + ${destX}px), calc(-50% + ${destY + 25}px)) scale(${scale * 0.85}) rotate(${rotation}deg)`,
-              opacity: 0
-            }
-          ],
-          {
-            duration: 850 + Math.random() * 300,
-            easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-            fill: "forwards"
-          }
-        );
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.08);
+    }
 
-        anim.onfinish = () => particle.remove();
+    function playRevealChime() {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((freq, idx) => {
+        const t = ctx.currentTime + idx * 0.065;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t);
+
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.12, t + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.45);
+      });
+    }
+
+    function spawnParticles() {
+      const rect = stickWrapper.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const emojis = ["❤️", "💖", "✨", "🥰", "💕"];
+
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.textContent = emojis[i % emojis.length];
+        const angle = (Math.PI * 2 * i) / 12 + (Math.random() - 0.5) * 0.4;
+        const dist = 65 + Math.random() * 85;
+        p.style.left = `${cx}px`;
+        p.style.top = `${cy}px`;
+        p.style.setProperty("--tx", `${Math.cos(angle) * dist}px`);
+        p.style.setProperty("--ty", `${Math.sin(angle) * dist - 20}px`);
+        p.style.setProperty("--rot", `${(Math.random() - 0.5) * 70}deg`);
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1000);
       }
     }
 
-    /**
-     * ==========================================================================
-     * AKTUALIZACJA INTERFEJSU I LOGIKA LOSOWANIA
-     * ==========================================================================
-     */
-    function updateCounterUI(animateBump = false) {
-      const remaining = PATYCZKI.length - drawnIndices.length;
-      counterText.textContent = `W słoiku: ${remaining} / ${PATYCZKI.length}`;
-
-      if (animateBump) {
-        counterPill.classList.remove("bump");
-        void counterPill.offsetWidth;
-        counterPill.classList.add("bump");
-        setTimeout(() => counterPill.classList.remove("bump"), 260);
+    function showPhoto(src, animate = true) {
+      if (!src) {
+        photoCard.classList.remove("has-photo", "visible");
+        return;
       }
-    }
-
-    function updateSoundUI() {
-      soundToggleBtn.textContent = soundEnabled ? "🔊" : "🔇";
-      soundToggleBtn.setAttribute(
-        "aria-label",
-        soundEnabled ? "Wyłącz dźwięk" : "Włącz dźwięk"
-      );
-    }
-
-    function getAvailableIndices() {
-      const available = [];
-      for (let i = 0; i < PATYCZKI.length; i++) {
-        if (!drawnIndices.includes(i)) {
-          available.push(i);
+      const loader = new Image();
+      loader.onload = () => {
+        photoImg.src = src;
+        lightboxImg.src = src;
+        photoCard.classList.add("has-photo");
+        if (animate) {
+          photoCard.classList.remove("visible");
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => photoCard.classList.add("visible"));
+          });
+        } else {
+          photoCard.classList.add("visible");
         }
-      }
-      return available;
+      };
+      loader.onerror = () => {
+        // Jeśli zdjęcie nie istnieje lub nazwa pliku ma literówkę, ukryj ramkę bez błędu
+        photoCard.classList.remove("has-photo", "visible");
+      };
+      loader.src = src;
     }
 
-    function performDraw() {
-      if (isAnimating) return;
+    function showStick(message, animate = true) {
+      if (!message) return;
+      stickText.textContent = message;
+      stickText.classList.toggle("long-text", message.length > 34);
+      const tilt = (Math.random() * 3.6 - 1.8).toFixed(2);
+      stickWrapper.classList.add("active");
+      if (animate) {
+        stickWrapper.classList.remove("visible");
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            stickWrapper.classList.add("visible");
+            stickWrapper.style.transform = `translateY(0) scale(1) rotate(${tilt}deg)`;
+          });
+        });
+      } else {
+        stickWrapper.classList.add("visible");
+        stickWrapper.style.transform = `translateY(0) scale(1) rotate(${tilt}deg)`;
+      }
+    }
 
-      const available = getAvailableIndices();
-      if (available.length === 0) {
-        showEmptyJarState();
+    function updateUI() {
+      // Odśwież stan dnia na wypadek, gdyby minęła północ przy otwartej aplikacji
+      dailyState = loadDailyState();
+      soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
+
+      const leftToday = Math.max(0, LIMIT_DZIENNY - dailyState.count);
+
+      if (leftToday === 0) {
+        drawBtn.style.display = "none";
+        dailyHint.style.display = "none";
+        limitCard.classList.add("show");
+      } else {
+        drawBtn.style.display = "flex";
+        dailyHint.style.display = "block";
+        limitCard.classList.remove("show");
+        const word = leftToday === 1 ? "losowanie" : "losowania";
+        dailyHint.textContent = `Dziś pozostało: ${leftToday} z ${LIMIT_DZIENNY} ${word} 💕`;
+      }
+    }
+
+    function pickNextPhoto() {
+      if (!Array.isArray(ZDJECIA) || ZDJECIA.length === 0) return "";
+      let availablePhotos = [];
+      for (let i = 0; i < ZDJECIA.length; i++) {
+        if (!drawnPhotos.includes(i)) availablePhotos.push(i);
+      }
+      if (availablePhotos.length === 0) {
+        drawnPhotos = [];
+        availablePhotos = ZDJECIA.map((_, i) => i);
+      }
+      const chosenPhotoIdx = availablePhotos[Math.floor(Math.random() * availablePhotos.length)];
+      drawnPhotos.push(chosenPhotoIdx);
+      localStorage.setItem(STORAGE_PHOTOS_KEY, JSON.stringify(drawnPhotos));
+      return ZDJECIA[chosenPhotoIdx];
+    }
+
+    function drawStick() {
+      if (isDrawing) return;
+
+      dailyState = loadDailyState();
+      if (dailyState.count >= LIMIT_DZIENNY) {
+        updateUI();
         return;
       }
 
-      isAnimating = true;
-      drawBtn.disabled = true;
-      drawAnotherBtn.disabled = true;
-
-      // Dźwięk potrząsania patyczkami
-      sound.playWoodRattle();
-
-      // Potrząsamy aktualnie widocznym elementem (przyciskiem "Losuj" lub patyczkiem)
-      const isFirstScreen = startView.style.display !== "none";
-      if (isFirstScreen) {
-        jarEmblem.classList.add("is-shaking");
-        drawBtn.classList.add("is-shaking");
-      } else {
-        woodenStick.classList.add("is-shaking");
+      // Wybór niepowtarzającego się patyczka (automatyczne uzupełnienie po wylosowaniu wszystkich 102)
+      let available = [];
+      for (let i = 0; i < PATYCZKI.length; i++) {
+        if (!drawnIndices.includes(i)) available.push(i);
+      }
+      if (available.length === 0) {
+        drawnIndices = [];
+        available = PATYCZKI.map((_, i) => i);
       }
 
-      // Po zakończeniu animacji potrząsania wysuwamy wylosowany patyczek
-      setTimeout(() => {
-        jarEmblem.classList.remove("is-shaking");
-        drawBtn.classList.remove("is-shaking");
-        woodenStick.classList.remove("is-shaking");
+      isDrawing = true;
+      drawBtn.disabled = true;
+      drawBtn.classList.add("shaking");
+      jarGlow.classList.add("pulse");
 
-        // Losowanie bez powtórek z dostępnej puli
-        const randomPos = Math.floor(Math.random() * available.length);
-        const chosenIndex = available[randomPos];
+      playWoodTap(0.02, 270);
+      playWoodTap(0.16, 310);
+      playWoodTap(0.30, 250);
+      playWoodTap(0.44, 330);
+
+      photoCard.classList.remove("visible");
+      stickWrapper.classList.remove("visible");
+      void stickWrapper.offsetWidth;
+      stickWrapper.classList.add("drawing");
+
+      const chosenIndex = available[Math.floor(Math.random() * available.length)];
+      const message = PATYCZKI[chosenIndex];
+      const photoSrc = pickNextPhoto();
+
+      setTimeout(() => {
+        stickWrapper.classList.remove("drawing");
 
         drawnIndices.push(chosenIndex);
-        saveState();
-        updateCounterUI(true);
+        localStorage.setItem(STORAGE_DRAWN_KEY, JSON.stringify(drawnIndices));
 
-        // Przełączenie widoku na drewniany patyczek
-        startView.style.display = "none";
-        emptyJarView.classList.remove("visible");
-        stickView.classList.add("visible");
+        dailyState = {
+          date: getTodayKey(),
+          count: dailyState.count + 1,
+          lastMessage: message,
+          lastPhoto: photoSrc
+        };
+        localStorage.setItem(STORAGE_DAILY_KEY, JSON.stringify(dailyState));
 
-        stickText.textContent = PATYCZKI[chosenIndex];
+        showPhoto(photoSrc, true);
+        showStick(message, true);
 
-        // Restart animacji wysuwania patyczka
-        woodenStick.classList.remove("stick-slide-in");
-        void woodenStick.offsetWidth;
-        woodenStick.classList.add("stick-slide-in");
+        playRevealChime();
+        spawnParticles();
 
-        // Jeśli to był ostatni (53.) patyczek, zmieniamy napis dolnego przycisku
-        const leftNow = PATYCZKI.length - drawnIndices.length;
-        drawAnotherBtn.textContent =
-          leftNow === 0 ? "Zakończ losowanie 💝" : "Losuj kolejny ✨";
-
-        // Rozbłysk serduszek i dźwięk odkrycia
-        triggerHeartBurst();
-        sound.playRevealChime();
-
+        drawBtn.classList.remove("shaking");
+        jarGlow.classList.remove("pulse");
         drawBtn.disabled = false;
-        drawAnotherBtn.disabled = false;
-        isAnimating = false;
+        isDrawing = false;
+
+        updateUI();
       }, 680);
     }
 
-    function showEmptyJarState() {
-      startView.style.display = "none";
-      stickView.classList.remove("visible");
-      emptyJarView.classList.add("visible");
-      triggerHeartBurst();
-    }
+    drawBtn.addEventListener("click", drawStick);
 
-    function resetJar() {
-      drawnIndices = [];
-      saveState();
-      updateCounterUI(true);
-      sound.playResetSound();
-      triggerHeartBurst();
-
-      emptyJarView.classList.remove("visible");
-      stickView.classList.remove("visible");
-      startView.style.display = "flex";
-    }
-
-    /**
-     * ==========================================================================
-     * INICJALIZACJA I NASŁUCHIWANIE ZDARZEŃ
-     * ==========================================================================
-     */
-    window.addEventListener("DOMContentLoaded", () => {
-      loadState();
-      createBackgroundHearts();
-      updateCounterUI(false);
-      updateSoundUI();
-
-      // Jeśli przy starcie słoik jest już pusty, pokaż ekran podsumowania
-      if (drawnIndices.length >= PATYCZKI.length) {
-        startView.style.display = "none";
-        emptyJarView.classList.add("visible");
-      }
-
-      // Kliknięcie głównego przycisku "Losuj"
-      drawBtn.addEventListener("click", performDraw);
-
-      // Kliknięcie przycisku "Losuj kolejny"
-      drawAnotherBtn.addEventListener("click", () => {
-        if (getAvailableIndices().length === 0) {
-          showEmptyJarState();
-        } else {
-          performDraw();
-        }
-      });
-
-      // Kliknięcie samego patyczka daje dodatkowy rozbłysk serduszek
-      woodenStick.addEventListener("click", () => {
-        if (isAnimating) return;
-        woodenStick.classList.remove("is-shaking");
-        void woodenStick.offsetWidth;
-        woodenStick.classList.add("is-shaking");
-        triggerHeartBurst();
-        sound.playRevealChime();
-        setTimeout(() => woodenStick.classList.remove("is-shaking"), 680);
-      });
-
-      // Przycisk ponownego włożenia patyczków do słoika
-      resetJarBtn.addEventListener("click", resetJar);
-
-      // Przełącznik dźwięku
-      soundToggleBtn.addEventListener("click", () => {
-        soundEnabled = !soundEnabled;
-        saveState();
-        updateSoundUI();
-        if (soundEnabled) {
-          sound.playRevealChime();
-        }
-      });
+    photoCard.addEventListener("click", () => {
+      if (photoImg.src) lightbox.classList.add("open");
     });
+
+    lightbox.addEventListener("click", () => {
+      lightbox.classList.remove("open");
+    });
+
+    soundToggle.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      localStorage.setItem(SOUND_KEY, String(soundEnabled));
+      updateUI();
+      if (soundEnabled) playWoodTap(0, 320);
+    });
+
+    // Przywrócenie ostatnio wylosowanego dziś patyczka i zdjęcia po ponownym otwarciu aplikacji
+    if (dailyState.count > 0 && dailyState.lastMessage) {
+      showPhoto(dailyState.lastPhoto, false);
+      showStick(dailyState.lastMessage, false);
+    }
+
+    initBgHearts();
+    updateUI();
   </script>
 </body>
 </html>
