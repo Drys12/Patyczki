@@ -93,7 +93,7 @@
       }
     }
 
-    /* Górny pasek (bez licznika, tylko przycisk dźwięku po prawej) */
+    /* Górny pasek (tylko przycisk dźwięku) */
     header {
       width: 100%;
       display: flex;
@@ -136,19 +136,17 @@
       justify-content: center;
       position: relative;
       z-index: 2;
-      gap: 24px;
+      gap: 28px;
     }
 
-    /* Scena prezentacji zdjęcia i patyczka */
+    /* Scena prezentacji: pokazuje ALBO patyczek, ALBO zdjęcie */
     .stage {
       width: 100%;
+      min-height: 220px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
-      gap: 18px;
-      min-height: 140px;
     }
 
     .jar-glow {
@@ -156,7 +154,7 @@
       width: 260px;
       height: 260px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 72%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0) 72%);
       pointer-events: none;
       transition: transform 0.4s ease, opacity 0.4s ease;
     }
@@ -170,48 +168,48 @@
       to { transform: scale(1.22); opacity: 1; }
     }
 
-    /* Ramka Polaroid na wspólne zdjęcie */
+    /* Ramka Polaroid na wspólne zdjęcie (zamiast patyczka) */
     .photo-card {
       display: none;
       background: #ffffff;
-      padding: 10px 10px 26px 10px;
-      border-radius: 16px;
+      padding: 12px 12px 34px 12px;
+      border-radius: 18px;
       box-shadow:
-        0 14px 30px rgba(138, 43, 77, 0.22),
+        0 16px 34px rgba(138, 43, 77, 0.24),
         0 2px 6px rgba(0, 0, 0, 0.06);
-      transform: scale(0.85) rotate(2deg);
+      transform: translateY(30px) scale(0.84) rotate(1.5deg);
       opacity: 0;
       transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 1.25, 0.36, 1);
       cursor: zoom-in;
       position: relative;
-      z-index: 2;
+      z-index: 3;
     }
 
-    .photo-card.has-photo {
+    .photo-card.active {
       display: block;
     }
 
     .photo-card.visible {
       opacity: 1;
-      transform: scale(1) rotate(2deg);
+      transform: translateY(0) scale(1) rotate(1.5deg);
     }
 
     .photo-card img {
-      width: 205px;
-      height: 205px;
+      width: 245px;
+      height: 245px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 12px;
       display: block;
       background: #ffe4ee;
     }
 
     .photo-caption {
       position: absolute;
-      bottom: 5px;
+      bottom: 8px;
       left: 0;
       right: 0;
       text-align: center;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 800;
       color: #b5486e;
       letter-spacing: 0.3px;
@@ -256,8 +254,8 @@
       position: relative;
       width: 100%;
       max-width: 365px;
-      min-height: 86px;
-      padding: 18px 34px;
+      min-height: 92px;
+      padding: 20px 34px;
       border-radius: 999px;
       background:
         repeating-linear-gradient(
@@ -300,7 +298,7 @@
     }
 
     .stick-text {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 800;
       line-height: 1.3;
       color: var(--wood-text);
@@ -309,7 +307,7 @@
     }
 
     .stick-text.long-text {
-      font-size: 17.5px;
+      font-size: 18px;
     }
 
     /* Strefa przycisku "Losuj" i limitu dziennego */
@@ -385,7 +383,7 @@
       color: #8f2d52;
     }
 
-    /* Komunikat po wykorzystaniu 3 patyczków na dziś */
+    /* Komunikat po wykorzystaniu 3 losowań na dziś */
     .limit-card {
       display: none;
       flex-direction: column;
@@ -472,14 +470,10 @@
       }
     }
 
-    /* Mniejsze ekrany */
-    @media (max-height: 700px) {
+    @media (max-height: 680px) {
       .photo-card img {
-        width: 165px;
-        height: 165px;
-      }
-      main {
-        gap: 16px;
+        width: 205px;
+        height: 205px;
       }
       .draw-btn {
         height: 64px;
@@ -500,13 +494,13 @@
     <div class="stage" id="stage">
       <div class="jar-glow" id="jarGlow"></div>
 
-      <!-- Wspólne zdjęcie w stylu Polaroid (pojawi się automatycznie, gdy dodasz pliki do listy ZDJECIA) -->
+      <!-- Wspólne zdjęcie (wyświetla się ZAMIAST patyczka, gdy zostanie wylosowane) -->
       <div class="photo-card" id="photoCard" title="Kliknij, aby powiększyć">
         <img id="photoImg" src="" alt="Nasze wspólne zdjęcie ❤️" />
         <div class="photo-caption">My ❤️</div>
       </div>
 
-      <!-- Drewniany patyczek z wiadomością -->
+      <!-- Drewniany patyczek (wyświetla się ZAMIAST zdjęcia, gdy zostanie wylosowany) -->
       <div class="stick-wrapper" id="stickWrapper">
         <div class="popsicle-stick">
           <div class="stick-text" id="stickText">Kocham Cię! ❤️</div>
@@ -519,7 +513,7 @@
       <div class="daily-hint" id="dailyHint">Dziś pozostało: 3 z 3 losowań 💕</div>
 
       <div class="limit-card" id="limitCard">
-        <strong>Wykorzystałaś już 3 patyczki na dziś 🥰</strong>
+        <strong>Wykorzystałaś już 3 losowania na dziś 🥰</strong>
         <span>Wróć jutro po kolejną porcję miłości! ❤️</span>
       </div>
     </div>
@@ -532,21 +526,19 @@
 
   <script>
     // =========================================================================
-    // 1. WASZE WSPÓLNE ZDJĘCIA
-    // Wgraj Wasze zdjęcia na GitHuba (do tego samego folderu co index.html)
-    // i dopisz ich dokładne nazwy plików poniżej (w cudzysłowach, po przecinku):
+    // 1. WASZE WSPÓLNE ZDJĘCIA (wspólna pula razem z patyczkami)
     // =========================================================================
-   const ZDJECIA = [
-  "1.jpg",
-  "2.jpg",
-  "3.jpg",
-  "4.jpeg",
-  "5.jpg",
-  "6.jpg"
+    const ZDJECIA = [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg",
+      "4.jpeg",
+      "5.jpg",
+      "6.jpg"
     ];
 
     // =========================================================================
-    // 2. LISTA WSZYSTKICH 102 PATYCZKÓW
+    // 2. LISTA WSZYSTKICH 102 PATYCZKÓW TEKSTOWYCH
     // =========================================================================
     const PATYCZKI = [
       "Kocham Cię! ❤️",
@@ -653,13 +645,17 @@
       "Jak dobrze, że nasze drogi się spotkały! 💍❤️"
     ];
 
+    // Łączna pula wszystkich losów: najpierw patyczki tekstowe, potem zdjęcia
+    const PULA = [
+      ...PATYCZKI.map(text => ({ type: "text", value: text })),
+      ...ZDJECIA.map(src => ({ type: "photo", value: src }))
+    ];
+
     const LIMIT_DZIENNY = 3;
-    const STORAGE_DRAWN_KEY = "patyczki_wylosowane_v2";
-    const STORAGE_PHOTOS_KEY = "patyczki_zdjecia_v2";
-    const STORAGE_DAILY_KEY = "patyczki_dzis_v2";
+    const STORAGE_DRAWN_KEY = "patyczki_wylosowane_v3";
+    const STORAGE_DAILY_KEY = "patyczki_dzis_v3";
     const SOUND_KEY = "patyczki_dzwiek_v1";
 
-    // Zwraca dzisiejszą datę w lokalnej strefie czasowej (np. "2026-11-26")
     function getTodayKey() {
       const d = new Date();
       const y = d.getFullYear();
@@ -669,10 +665,7 @@
     }
 
     let drawnIndices = JSON.parse(localStorage.getItem(STORAGE_DRAWN_KEY) || "[]")
-      .filter(i => Number.isInteger(i) && i >= 0 && i < PATYCZKI.length);
-
-    let drawnPhotos = JSON.parse(localStorage.getItem(STORAGE_PHOTOS_KEY) || "[]")
-      .filter(i => Number.isInteger(i) && i >= 0 && i < ZDJECIA.length);
+      .filter(i => Number.isInteger(i) && i >= 0 && i < PULA.length);
 
     function loadDailyState() {
       const today = getTodayKey();
@@ -682,12 +675,11 @@
           return {
             date: today,
             count: Math.min(LIMIT_DZIENNY, Math.max(0, Number(saved.count) || 0)),
-            lastMessage: saved.lastMessage || "",
-            lastPhoto: saved.lastPhoto || ""
+            lastItem: saved.lastItem || null
           };
         }
       } catch (e) {}
-      return { date: today, count: 0, lastMessage: "", lastPhoto: "" };
+      return { date: today, count: 0, lastItem: null };
     }
 
     let dailyState = loadDailyState();
@@ -706,7 +698,6 @@
     const soundToggle = document.getElementById("soundToggle");
     const jarGlow = document.getElementById("jarGlow");
 
-    // Subtelne pływające serduszka w tle
     function initBgHearts() {
       const container = document.getElementById("bgHearts");
       const icons = ["💗", "💖", "💕", "🌸", "✨"];
@@ -722,7 +713,6 @@
       }
     }
 
-    // Dźwięki generowane przez Web Audio API
     let audioCtx = null;
     function getAudioCtx() {
       if (!audioCtx) {
@@ -780,8 +770,8 @@
       });
     }
 
-    function spawnParticles() {
-      const rect = stickWrapper.getBoundingClientRect();
+    function spawnParticles(targetEl) {
+      const rect = targetEl.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
       const emojis = ["❤️", "💖", "✨", "🥰", "💕"];
@@ -802,38 +792,18 @@
       }
     }
 
-    function showPhoto(src, animate = true) {
-      if (!src) {
-        photoCard.classList.remove("has-photo", "visible");
-        return;
-      }
-      const loader = new Image();
-      loader.onload = () => {
-        photoImg.src = src;
-        lightboxImg.src = src;
-        photoCard.classList.add("has-photo");
-        if (animate) {
-          photoCard.classList.remove("visible");
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => photoCard.classList.add("visible"));
-          });
-        } else {
-          photoCard.classList.add("visible");
-        }
-      };
-      loader.onerror = () => {
-        // Jeśli zdjęcie nie istnieje lub nazwa pliku ma literówkę, ukryj ramkę bez błędu
-        photoCard.classList.remove("has-photo", "visible");
-      };
-      loader.src = src;
+    function hideAllResults() {
+      photoCard.classList.remove("active", "visible");
+      stickWrapper.classList.remove("active", "visible");
     }
 
-    function showStick(message, animate = true) {
-      if (!message) return;
+    function showStickOnly(message, animate = true) {
+      photoCard.classList.remove("active", "visible");
       stickText.textContent = message;
       stickText.classList.toggle("long-text", message.length > 34);
       const tilt = (Math.random() * 3.6 - 1.8).toFixed(2);
       stickWrapper.classList.add("active");
+
       if (animate) {
         stickWrapper.classList.remove("visible");
         requestAnimationFrame(() => {
@@ -848,8 +818,46 @@
       }
     }
 
+    function showPhotoOnly(src, animate = true) {
+      stickWrapper.classList.remove("active", "visible");
+      const tilt = (Math.random() * 4 - 2).toFixed(2);
+
+      const loader = new Image();
+      loader.onload = () => {
+        photoImg.src = src;
+        lightboxImg.src = src;
+        photoCard.classList.add("active");
+        if (animate) {
+          photoCard.classList.remove("visible");
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              photoCard.classList.add("visible");
+              photoCard.style.transform = `translateY(0) scale(1) rotate(${tilt}deg)`;
+            });
+          });
+        } else {
+          photoCard.classList.add("visible");
+          photoCard.style.transform = `translateY(0) scale(1) rotate(${tilt}deg)`;
+        }
+      };
+      loader.onerror = () => {
+        // Awaryjnie pokaż losowy patyczek tekstowy, jeśli plik zdjęcia nie został jeszcze wgrany
+        const fallback = PATYCZKI[Math.floor(Math.random() * PATYCZKI.length)];
+        showStickOnly(fallback, animate);
+      };
+      loader.src = src;
+    }
+
+    function renderItem(item, animate = true) {
+      if (!item) return;
+      if (item.type === "photo") {
+        showPhotoOnly(item.value, animate);
+      } else {
+        showStickOnly(item.value, animate);
+      }
+    }
+
     function updateUI() {
-      // Odśwież stan dnia na wypadek, gdyby minęła północ przy otwartej aplikacji
       dailyState = loadDailyState();
       soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
 
@@ -868,23 +876,7 @@
       }
     }
 
-    function pickNextPhoto() {
-      if (!Array.isArray(ZDJECIA) || ZDJECIA.length === 0) return "";
-      let availablePhotos = [];
-      for (let i = 0; i < ZDJECIA.length; i++) {
-        if (!drawnPhotos.includes(i)) availablePhotos.push(i);
-      }
-      if (availablePhotos.length === 0) {
-        drawnPhotos = [];
-        availablePhotos = ZDJECIA.map((_, i) => i);
-      }
-      const chosenPhotoIdx = availablePhotos[Math.floor(Math.random() * availablePhotos.length)];
-      drawnPhotos.push(chosenPhotoIdx);
-      localStorage.setItem(STORAGE_PHOTOS_KEY, JSON.stringify(drawnPhotos));
-      return ZDJECIA[chosenPhotoIdx];
-    }
-
-    function drawStick() {
+    function drawItem() {
       if (isDrawing) return;
 
       dailyState = loadDailyState();
@@ -893,14 +885,13 @@
         return;
       }
 
-      // Wybór niepowtarzającego się patyczka (automatyczne uzupełnienie po wylosowaniu wszystkich 102)
       let available = [];
-      for (let i = 0; i < PATYCZKI.length; i++) {
+      for (let i = 0; i < PULA.length; i++) {
         if (!drawnIndices.includes(i)) available.push(i);
       }
       if (available.length === 0) {
         drawnIndices = [];
-        available = PATYCZKI.map((_, i) => i);
+        available = PULA.map((_, i) => i);
       }
 
       isDrawing = true;
@@ -913,14 +904,12 @@
       playWoodTap(0.30, 250);
       playWoodTap(0.44, 330);
 
-      photoCard.classList.remove("visible");
-      stickWrapper.classList.remove("visible");
+      hideAllResults();
       void stickWrapper.offsetWidth;
       stickWrapper.classList.add("drawing");
 
       const chosenIndex = available[Math.floor(Math.random() * available.length)];
-      const message = PATYCZKI[chosenIndex];
-      const photoSrc = pickNextPhoto();
+      const chosenItem = PULA[chosenIndex];
 
       setTimeout(() => {
         stickWrapper.classList.remove("drawing");
@@ -931,16 +920,14 @@
         dailyState = {
           date: getTodayKey(),
           count: dailyState.count + 1,
-          lastMessage: message,
-          lastPhoto: photoSrc
+          lastItem: chosenItem
         };
         localStorage.setItem(STORAGE_DAILY_KEY, JSON.stringify(dailyState));
 
-        showPhoto(photoSrc, true);
-        showStick(message, true);
+        renderItem(chosenItem, true);
 
         playRevealChime();
-        spawnParticles();
+        spawnParticles(chosenItem.type === "photo" ? photoCard : stickWrapper);
 
         drawBtn.classList.remove("shaking");
         jarGlow.classList.remove("pulse");
@@ -951,7 +938,7 @@
       }, 680);
     }
 
-    drawBtn.addEventListener("click", drawStick);
+    drawBtn.addEventListener("click", drawItem);
 
     photoCard.addEventListener("click", () => {
       if (photoImg.src) lightbox.classList.add("open");
@@ -968,10 +955,8 @@
       if (soundEnabled) playWoodTap(0, 320);
     });
 
-    // Przywrócenie ostatnio wylosowanego dziś patyczka i zdjęcia po ponownym otwarciu aplikacji
-    if (dailyState.count > 0 && dailyState.lastMessage) {
-      showPhoto(dailyState.lastPhoto, false);
-      showStick(dailyState.lastMessage, false);
+    if (dailyState.count > 0 && dailyState.lastItem) {
+      renderItem(dailyState.lastItem, false);
     }
 
     initBgHearts();
