@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow, noimageindex">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Patyczki dla Oli ❤️</title>
 
@@ -879,7 +880,7 @@
       border: 1px solid rgba(255, 255, 255, 0.95);
     }
 
-    /* Siatka Memory 4x5 (wszystkie 10 zdjęć = 20 kart) */
+    /* Siatka Memory 4x4 (8 losowych zdjęć = 16 kart) */
     .memory-grid {
       width: 100%;
       max-width: min(350px, 44dvh);
@@ -1225,7 +1226,7 @@
         <button class="game-tab-btn" id="tabFlappyBtn">🤪 Flappy Mąż</button>
       </div>
 
-      <!-- PANEL 1: MEMORY Z NASZYMI ZDJĘCIAMI (20 kart = 10 zdjęć) -->
+      <!-- PANEL 1: MEMORY Z NASZYMI ZDJĘCIAMI (16 kart = 8 losowych zdjęć) -->
       <div class="game-panel active" id="panelMemory">
         <div class="game-stats-row">
           <span class="stat-chip">Ruchy: <strong id="memMoves">0</strong></span>
@@ -1434,7 +1435,8 @@
     ];
 
     const LIMIT_DZIENNY = 3;
-    const MEMORY_BONUS_MAX_MOVES = 26;
+    const MEMORY_PAIR_COUNT = 8;
+    const MEMORY_BONUS_MAX_MOVES = 21;
     const FLAPPY_BONUS_MIN_SCORE = 10;
 
     const STORAGE_REGULAR_DRAWN = "patyczki_reg_drawn_v4";
@@ -1442,7 +1444,8 @@
     const STORAGE_DAILY_KEY = "patyczki_dzis_v4";
     const STORAGE_FAVS_KEY = "patyczki_ulubione_v4";
     const STORAGE_WEEKLY_BONUS = "patyczki_weekly_bonus_v1";
-    const STORAGE_MEM_BEST = "patyczki_mem_best_v1";
+    const STORAGE_MEM_BEST_LEGACY = "patyczki_mem_best_v1";
+    const STORAGE_MEM_BEST = "patyczki_mem_best_4x4_v1";
     const STORAGE_FLAPPY_BEST = "patyczki_flappy_best_v1";
     const SOUND_KEY = "patyczki_dzwiek_v1";
 
@@ -2107,7 +2110,7 @@
       }
     }
 
-    // --- GRA 1: MEMORY Z NASZYMI ZDJĘCIAMI (wszystkie 10 zdjęć = 20 kart) ---
+    // --- GRA 1: MEMORY Z NASZYMI ZDJĘCIAMI (8 losowych zdjęć = 16 kart) ---
     const memoryGrid = document.getElementById("memoryGrid");
     const memMovesEl = document.getElementById("memMoves");
     const memTimeEl = document.getElementById("memTime");
@@ -2118,7 +2121,8 @@
     let memCards = [];
     let memFlipped = [];
     let memMatchedCount = 0;
-    let memTotalPairs = 10;
+    let memTotalPairs = MEMORY_PAIR_COUNT;
+    let memPreviousPhotos = [];
     let memMoves = 0;
     let memSeconds = 0;
     let memTimerId = null;
@@ -2178,7 +2182,22 @@
       memResultBanner.classList.remove("show");
       updateMemoryStats();
 
-      const selectedPhotos = [...ZDJECIA];
+      // Losowanie 8 różnych zdjęć bez zwracania, metodą Fisher-Yates.
+      const photoPool = [...new Set(ZDJECIA)];
+      for (let i = photoPool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [photoPool[i], photoPool[j]] = [photoPool[j], photoPool[i]];
+      }
+      const selectedPhotos = photoPool.slice(0, MEMORY_PAIR_COUNT);
+      // Kolejne rozdanie nie powtarza identycznego zestawu w tej sesji.
+      if (photoPool.length > selectedPhotos.length &&
+          selectedPhotos.length === memPreviousPhotos.length &&
+          selectedPhotos.every(src => memPreviousPhotos.includes(src))) {
+        const i = Math.floor(Math.random() * selectedPhotos.length);
+        const j = selectedPhotos.length + Math.floor(Math.random() * (photoPool.length - selectedPhotos.length));
+        selectedPhotos[i] = photoPool[j];
+      }
+      memPreviousPhotos = [...selectedPhotos];
       memTotalPairs = selectedPhotos.length;
 
       const pairs = [];
@@ -2804,10 +2823,10 @@
     });
     allModals.forEach(m=>observer.observe(m,{attributes:true,attributeFilter:["class"]}));
     document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(lightbox.classList.contains("open")){lightbox.classList.remove("open");return;}allModals.forEach(m=>{if(m.id==="gamesModal" && m.classList.contains("open"))closeGamesModal();else m.classList.remove("open");});});
-    const backupKeys=[STORAGE_REGULAR_DRAWN,STORAGE_GOLDEN_MONTH,STORAGE_DAILY_KEY,STORAGE_FAVS_KEY,STORAGE_WEEKLY_BONUS,STORAGE_MEM_BEST,STORAGE_FLAPPY_BEST,SOUND_KEY,WALLET_KEY,ALBUM_KEY,HISTORY_KEY,MIGRATION_KEY];
+    const backupKeys=[STORAGE_REGULAR_DRAWN,STORAGE_GOLDEN_MONTH,STORAGE_DAILY_KEY,STORAGE_FAVS_KEY,STORAGE_WEEKLY_BONUS,STORAGE_MEM_BEST_LEGACY,STORAGE_MEM_BEST,STORAGE_FLAPPY_BEST,SOUND_KEY,WALLET_KEY,ALBUM_KEY,HISTORY_KEY,MIGRATION_KEY];
     $("exportBtn").addEventListener("click",()=>{const data=Object.fromEntries(backupKeys.map(k=>[k,localStorage.getItem(k)]));const url=URL.createObjectURL(new Blob([JSON.stringify({app:"Patyczki",version:2,data},null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download=`patyczki-${getTodayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
     $("importBtn").addEventListener("click",()=>$("importFile").click());
-    $("importFile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const b=JSON.parse(await file.text());if(b.app!=="Patyczki"||b.version!==2||!b.data||!backupKeys.every(k=>Object.hasOwn(b.data,k)&&(b.data[k]===null||typeof b.data[k]==="string")))throw Error();if(!confirm("Zastąpić obecne postępy danymi z kopii zapasowej?"))return;backupKeys.forEach(k=>b.data[k]===null?localStorage.removeItem(k):localStorage.setItem(k,b.data[k]));location.reload();}catch{alert("Nieprawidłowy plik kopii zapasowej.");}finally{e.target.value="";}});
+    $("importFile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const b=JSON.parse(await file.text());if(b.app!=="Patyczki"||b.version!==2||!b.data||!backupKeys.every(k=>(k===STORAGE_MEM_BEST&&!Object.hasOwn(b.data,k))||(Object.hasOwn(b.data,k)&&(b.data[k]===null||typeof b.data[k]==="string"))))throw Error();if(!confirm("Zastąpić obecne postępy danymi z kopii zapasowej?"))return;backupKeys.forEach(k=>b.data[k]==null?localStorage.removeItem(k):localStorage.setItem(k,b.data[k]));location.reload();}catch{alert("Nieprawidłowy plik kopii zapasowej.");}finally{e.target.value="";}});
     let shownDate=getTodayKey();
     function refreshDate(){if(isDrawing)return;if(shownDate!==getTodayKey()){shownDate=getTodayKey();showHome();}else updateUI();updateBonusStatusBar();}
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshDate();});
