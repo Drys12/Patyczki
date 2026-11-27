@@ -685,17 +685,17 @@
     .modal-sheet {
       width: 100%;
       max-width: 480px;
-      max-height: 92dvh;
+      max-height: 97dvh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       background: linear-gradient(180deg, #fff5f9 0%, #ffe6f0 100%);
-      border-radius: 28px 28px 0 0;
-      padding: 14px 16px calc(env(safe-area-inset-bottom) + 22px);
+      border-radius: 24px 24px 0 0;
+      padding: 12px 14px calc(env(safe-area-inset-bottom) + 16px);
       box-shadow: 0 -12px 36px rgba(92, 23, 50, 0.25);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       animation: slideUpSheet 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -708,7 +708,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 8px;
+      padding-bottom: 6px;
       border-bottom: 1px solid rgba(230, 57, 115, 0.15);
     }
 
@@ -806,11 +806,11 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 14px;
       background: rgba(255, 255, 255, 0.78);
       border: 1px solid rgba(230, 57, 115, 0.18);
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 800;
       color: #7d2244;
     }
@@ -833,7 +833,7 @@
     .game-tab-btn {
       border: none;
       border-radius: 12px;
-      padding: 9px 10px;
+      padding: 8px 10px;
       background: transparent;
       font-family: inherit;
       font-size: 13.5px;
@@ -853,7 +853,7 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
     }
 
@@ -874,18 +874,18 @@
 
     .stat-chip {
       background: rgba(255, 255, 255, 0.8);
-      padding: 5px 10px;
+      padding: 4px 10px;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.95);
     }
 
-    /* Siatka Memory 4x3 (mieści się w całości na ekranie Android Opera/Chrome) */
+    /* Siatka Memory 4x5 (wszystkie 10 zdjęć = 20 kart) */
     .memory-grid {
       width: 100%;
-      max-width: 360px;
+      max-width: min(350px, 44dvh);
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 6px;
       perspective: 800px;
     }
 
@@ -905,13 +905,13 @@
     .mem-face {
       position: absolute;
       inset: 0;
-      border-radius: 16px;
+      border-radius: 13px;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 5px 14px rgba(138, 43, 77, 0.15);
+      box-shadow: 0 4px 10px rgba(138, 43, 77, 0.14);
       overflow: hidden;
     }
 
@@ -919,12 +919,12 @@
       background: linear-gradient(145deg, #ff7aa8 0%, #e63973 100%);
       border: 2px solid rgba(255, 255, 255, 0.85);
       color: #ffffff;
-      font-size: 24px;
+      font-size: 20px;
     }
 
     .mem-front {
       background: #ffffff;
-      border: 3px solid #ffffff;
+      border: 2.5px solid #ffffff;
       transform: rotateY(180deg);
     }
 
@@ -937,7 +937,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 10px;
       display: block;
     }
 
@@ -945,14 +945,14 @@
       display: none;
       width: 100%;
       text-align: center;
-      padding: 10px 14px;
-      border-radius: 16px;
+      padding: 8px 12px;
+      border-radius: 14px;
       background: rgba(255, 255, 255, 0.9);
       border: 1.5px solid #ff8fb8;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 800;
       color: #8f2d52;
-      line-height: 1.4;
+      line-height: 1.35;
     }
 
     .mem-result-banner.show {
@@ -961,7 +961,7 @@
     }
 
     .game-action-btn {
-      padding: 9px 20px;
+      padding: 8px 20px;
       border: none;
       border-radius: 999px;
       background: linear-gradient(180deg, #ff5c93 0%, var(--accent) 100%);
@@ -982,7 +982,7 @@
       position: relative;
       width: 100%;
       max-width: 360px;
-      height: min(330px, 46dvh);
+      height: min(390px, 54dvh);
       min-height: 230px;
       border-radius: 22px;
       overflow: hidden;
@@ -1045,7 +1045,7 @@
       .photo-card img { width: 185px; height: 185px; }
       .draw-btn { height: 62px; font-size: 24px; }
       main { gap: 14px; }
-      .flappy-wrap { height: min(275px, 43dvh); }
+      .flappy-wrap { height: min(300px, 48dvh); }
     }
   </style>
 </head>
@@ -1133,7 +1133,7 @@
         <button class="game-tab-btn" id="tabFlappyBtn">🤪 Flappy Mąż</button>
       </div>
 
-      <!-- PANEL 1: MEMORY Z NASZYMI ZDJĘCIAMI -->
+      <!-- PANEL 1: MEMORY Z NASZYMI ZDJĘCIAMI (20 kart = 10 zdjęć) -->
       <div class="game-panel active" id="panelMemory">
         <div class="game-stats-row">
           <span class="stat-chip">Ruchy: <strong id="memMoves">0</strong></span>
@@ -1321,7 +1321,7 @@
     ];
 
     const LIMIT_DZIENNY = 3;
-    const MEMORY_BONUS_MAX_MOVES = 16;
+    const MEMORY_BONUS_MAX_MOVES = 26;
     const FLAPPY_BONUS_MIN_SCORE = 10;
 
     const STORAGE_REGULAR_DRAWN = "patyczki_reg_drawn_v4";
@@ -1984,7 +1984,7 @@
       }
     }
 
-    // --- GRA 1: MEMORY Z NASZYMI ZDJĘCIAMI (tylko zdjęcia 1.jpg - 10.jpg) ---
+    // --- GRA 1: MEMORY Z NASZYMI ZDJĘCIAMI (wszystkie 10 zdjęć = 20 kart) ---
     const memoryGrid = document.getElementById("memoryGrid");
     const memMovesEl = document.getElementById("memMoves");
     const memTimeEl = document.getElementById("memTime");
@@ -1995,7 +1995,7 @@
     let memCards = [];
     let memFlipped = [];
     let memMatchedCount = 0;
-    let memTotalPairs = 6;
+    let memTotalPairs = 10;
     let memMoves = 0;
     let memSeconds = 0;
     let memTimerId = null;
@@ -2048,12 +2048,7 @@
       memResultBanner.classList.remove("show");
       updateMemoryStats();
 
-      const shuffledPhotos = [...ZDJECIA];
-      for (let i = shuffledPhotos.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledPhotos[i], shuffledPhotos[j]] = [shuffledPhotos[j], shuffledPhotos[i]];
-      }
-      const selectedPhotos = shuffledPhotos.slice(0, 6);
+      const selectedPhotos = [...ZDJECIA];
       memTotalPairs = selectedPhotos.length;
 
       const pairs = [];
@@ -2196,7 +2191,7 @@
 
     function getFlappyLogicalSize() {
       const rect = flappyCanvas.parentElement.getBoundingClientRect();
-      return { w: rect.width || 340, h: rect.height || 300 };
+      return { w: rect.width || 340, h: rect.height || 340 };
     }
 
     function resetFlappyGame() {
