@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="robots" content="noindex, nofollow, noimageindex">
+  <meta name="patyczki-version" content="2.4.0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Patyczki dla Oli ❤️</title>
 
@@ -1102,6 +1103,28 @@
     .mem-card { border:0; background:transparent; padding:0; width:100%; }
     @media(max-height:740px) { body{gap:8px;padding-top:calc(env(safe-area-inset-top) + 9px)} .marriage-card{padding:8px} .marriage-card strong{font-size:23px} main{gap:10px} .jar-button{width:min(100%,250px,34dvh)} .jar-home h1{font-size:20px} .photo-card img{width: min(195px, 28dvh);height:min(195px,28dvh)} }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } .bg-hearts,.particle{display:none} }
+    /* Patyczki 2.3 — kalendarz adwentowy i aktualizacje */
+    .season-card,.update-notice { width:100%; max-width:440px; position:relative; z-index:3; border-radius:17px; padding:10px 13px; text-align:center; font-size:13px; font-weight:800; }
+    .season-card { background:linear-gradient(135deg,#fff5d9,#fffaf2); border:1px solid #e9c77d; color:#805119; }
+    .season-card strong { display:block; font-size:15px; }
+    .season-card span { display:block; font-size:12px; margin-top:3px; }
+    .update-notice { background:#fff4f9; border:1px solid #e8a9c0; color:#8f2d52; display:flex; align-items:center; justify-content:space-between; gap:8px; text-align:left; }
+    .season-card[hidden],.update-notice[hidden],#installUpdateBtn[hidden] { display:none; }
+    .update-notice .small-action { flex-shrink:0; align-self:center; }
+    .update-settings { background:#fff9; border-radius:15px; padding:12px; display:flex; flex-direction:column; gap:9px; }
+    .update-settings .setting-row { padding:0; background:none; }
+    .update-settings .small-action:disabled { opacity:.6; cursor:wait; }
+    /* Patyczki 2.4 — powitanie adwentowe i podpisy zdjęć */
+    .album-tile span { text-align:center; line-height:1.35; overflow-wrap:anywhere; }
+    .photo-card { padding-bottom:12px; max-width:100%; }
+    .photo-caption { position:static; margin-top:9px; max-width:230px; line-height:1.35; overflow-wrap:anywhere; }
+    .advent-welcome { position:fixed; inset:0; margin:auto; width:min(360px,calc(100% - 32px)); max-height:calc(100dvh - 32px); overflow:auto; padding:27px 22px; border:2px solid #fff; border-radius:28px; background:linear-gradient(150deg,#fffaf2,#ffe3eb); color:#87344f; box-shadow:0 18px 65px #68223b55; text-align:center; }
+    .advent-welcome::backdrop { background:#45162e99; backdrop-filter:blur(7px); }
+    .advent-welcome .gift { font-size:60px; line-height:1.25; }
+    .advent-welcome h2 { font-size:23px; font-weight:900; margin:10px 0; }
+    .advent-welcome p { font-size:17px; line-height:1.55; font-weight:800; margin:12px 0 21px; }
+    .advent-welcome .small-action { min-height:48px; width:100%; font-size:16px; }
+
   </style>
 </head>
 <body>
@@ -1119,6 +1142,19 @@
   </div>
 
   <div class="anniversary-banner" id="anniversaryBanner">DZIŚ ROCZNICA</div>
+  <aside class="season-card" id="adventBanner" hidden aria-live="polite">
+    <strong id="adventTitle"></strong><span id="adventSubtitle"></span>
+  </aside>
+  <aside class="update-notice" id="updateNotice" hidden>
+    <span id="updateNoticeText" role="status"></span><button class="small-action" id="homeUpdateBtn" type="button">Aktualizuj</button>
+  </aside>
+
+  <dialog class="advent-welcome" id="adventWelcome" aria-labelledby="adventWelcomeTitle" aria-describedby="adventWelcomeText">
+    <div class="gift" aria-hidden="true">🎁</div>
+    <h2 id="adventWelcomeTitle">Pierwsze okienko 💝</h2>
+    <p id="adventWelcomeText"></p>
+    <button class="small-action" id="adventWelcomeClose" type="button" autofocus>Otwórz prezent ❤️</button>
+  </dialog>
 
   <main id="mainArea">
     <div class="stage" id="stage">
@@ -1155,7 +1191,7 @@
       <!-- Wspólne zdjęcie (wyświetla się ZAMIAST patyczka) -->
       <div class="photo-card" id="photoCard" title="Kliknij, aby powiększyć">
         <img id="photoImg" src="" alt="Nasze wspólne zdjęcie ❤️" />
-        <div class="photo-caption">My ❤️</div>
+        <div class="photo-caption" id="photoCaption">My ❤️</div>
       </div>
 
       <!-- Drewniany lub złoty patyczek -->
@@ -1267,6 +1303,12 @@
     <div class="setting-row"><span>Historia losowań</span><button class="small-action secondary" id="openHistoryBtn">Otwórz</button></div>
     <div class="setting-row"><span>Kopia zapasowa postępów</span><button class="small-action secondary" id="exportBtn">Pobierz</button></div>
     <div class="setting-row"><span>Przywróć kopię</span><button class="small-action secondary" id="importBtn">Wczytaj</button><input type="file" id="importFile" accept=".json,application/json" hidden></div>
+    <div class="update-settings">
+      <div class="setting-row"><span>Wersja aplikacji</span><strong id="appVersionLabel"></strong></div>
+      <button class="small-action secondary" id="checkUpdateBtn" type="button">🔄 Sprawdź aktualizacje</button>
+      <p class="modal-subtitle" id="updateStatus" role="status">Aktualizacje są sprawdzane automatycznie.</p>
+      <button class="small-action" id="installUpdateBtn" type="button" hidden>Zainstaluj aktualizację</button>
+    </div>
     <p class="modal-subtitle">Postępy są zapisywane na tym urządzeniu. Zachowaj kopię, jeśli zmieniasz telefon.</p>
   </section></div>
   <div class="modal-overlay" id="historyModal" role="dialog" aria-modal="true" aria-label="Historia losowań"><section class="modal-sheet">
@@ -1306,6 +1348,20 @@
       "9.jpg",
       "10.jpg"
     ];
+
+    const PHOTO_CAPTIONS = Object.freeze({
+      "1.jpg": "Razem zaczynamy rok",
+      "2.jpg": "Młodzi my",
+      "3.jpg": "Pierwsze lato razem",
+      "4.jpg": "Nasza poza",
+      "5.jpg": "Jeszcze tam wrócimy!",
+      "6.jpg": "Piękne święta",
+      "7.jpg": "KRETAAAA",
+      "8.jpg": "Najpiękniejszy dzień w życiu",
+      "9.jpg": "Pierwsza rocznica",
+      "10.jpg": "Poprawiny, zdjęcie TOP"
+});
+    function photoCaption(src) { return PHOTO_CAPTIONS[src] || "Nasze wspólne zdjęcie ❤️"; }
 
     const FLAPPY_HEAD_IMG = "twarz-gra.png";
 
@@ -1772,7 +1828,7 @@
           });
           const label = document.createElement("div");
           label.className = "fav-item-text";
-          label.textContent = "Nasze wspólne zdjęcie ❤️";
+          label.textContent = photoCaption(item.value);
           content.appendChild(img);
           content.appendChild(label);
         } else {
@@ -1837,6 +1893,8 @@
       loader.onload = () => {
         if (currentDisplayedItem?.type !== "photo" || currentDisplayedItem.value !== src) return;
         photoImg.src = loader.src;
+        photoImg.alt = photoCaption(src);
+        document.getElementById("photoCaption").textContent = photoCaption(src);
         lightboxImg.src = loader.src;
         photoCard.classList.add("active");
         if (animate) {
@@ -2761,6 +2819,7 @@
     }
     function updateHomeDecor(regularLeft, bonusLeft) {
       const now = new Date();
+      updateAdventBanner(now);
       const days = Math.max(0, Math.round((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-Date.UTC(2024,7,31))/86400000));
       $("marriageDays").textContent = `${days} dni małżeństwa 💍`;
       $("greeting").textContent = now.getHours()<11 ? "Dzień dobry, Kochanie!" : now.getHours()>=20 ? "Coś miłego na dobranoc?" : "Co dziś dla Ciebie mam?";
@@ -2798,14 +2857,14 @@
       const grid=$("albumGrid");grid.replaceChildren();$("albumSummary").textContent=`Odkryto ${album.length} z ${ZDJECIA.length} wspomnień. Kolejne znajdziesz w patyczkach!`;
       ZDJECIA.forEach((src,i)=>{
         const found=album.includes(src);const tile=document.createElement(found?"button":"div");tile.className="album-tile";
-        if(found){const img=document.createElement("img");img.alt=`Wspomnienie ${i+1}`;attachPhotoWithVariants(img,src);tile.append(img);tile.addEventListener("click",()=>{if(img.naturalWidth){lightboxImg.src=img.src;lightbox.classList.add("open");}});}
+        if(found){const img=document.createElement("img");img.alt=photoCaption(src);attachPhotoWithVariants(img,src);tile.append(img);tile.addEventListener("click",()=>{if(img.naturalWidth){lightboxImg.src=img.src;lightbox.classList.add("open");}});}
         else {const lock=document.createElement("div");lock.className="album-locked";lock.textContent="🔒";tile.append(lock);}
-        const label=document.createElement("span");label.textContent=found?`Wspomnienie ${i+1}`:"Jeszcze nieodkryte";tile.append(label);grid.append(tile);
+        const label=document.createElement("span");label.textContent=found?photoCaption(src):"Jeszcze nieodkryte";tile.append(label);grid.append(tile);
       });
     }
     function renderHistory(){
       const list=$("historyList");list.replaceChildren();if(!history.length)return emptyMessage(list,"Jeszcze nie ma nowych losowań 💕");
-      history.forEach(h=>{const row=document.createElement("div");row.className="fav-item"+(h.type==="golden"?" golden":"");const content=document.createElement("div");content.className="fav-item-content";if(h.type==="photo"){const img=document.createElement("img");img.className="fav-thumb";img.alt="Wspólne zdjęcie";attachPhotoWithVariants(img,h.value);img.addEventListener("click",()=>{if(img.naturalWidth){lightboxImg.src=img.src;lightbox.classList.add("open");}});content.append(img);}const title=document.createElement("div");title.className="fav-item-text";title.textContent=h.type==="photo"?"Nasze wspólne zdjęcie ❤️":h.value;const date=document.createElement("small");date.className="history-date";date.textContent=h.date?localDate(h.date):"";title.append(date);content.append(title);row.append(content);list.append(row);});
+      history.forEach(h=>{const row=document.createElement("div");row.className="fav-item"+(h.type==="golden"?" golden":"");const content=document.createElement("div");content.className="fav-item-content";if(h.type==="photo"){const img=document.createElement("img");img.className="fav-thumb";img.alt="Wspólne zdjęcie";attachPhotoWithVariants(img,h.value);img.addEventListener("click",()=>{if(img.naturalWidth){lightboxImg.src=img.src;lightbox.classList.add("open");}});content.append(img);}const title=document.createElement("div");title.className="fav-item-text";title.textContent=h.type==="photo"?photoCaption(h.value):h.value;const date=document.createElement("small");date.className="history-date";date.textContent=h.date?localDate(h.date):"";title.append(date);content.append(title);row.append(content);list.append(row);});
     }
     const modalNav={favModal:"openFavsBtn",couponsModal:"openCouponsBtn",gamesModal:"openGamesBtn",albumModal:"openAlbumBtn"};
     const allModals=[...document.querySelectorAll(".modal-overlay")];
@@ -2827,6 +2886,100 @@
     $("exportBtn").addEventListener("click",()=>{const data=Object.fromEntries(backupKeys.map(k=>[k,localStorage.getItem(k)]));const url=URL.createObjectURL(new Blob([JSON.stringify({app:"Patyczki",version:2,data},null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download=`patyczki-${getTodayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
     $("importBtn").addEventListener("click",()=>$("importFile").click());
     $("importFile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const b=JSON.parse(await file.text());if(b.app!=="Patyczki"||b.version!==2||!b.data||!backupKeys.every(k=>(k===STORAGE_MEM_BEST&&!Object.hasOwn(b.data,k))||(Object.hasOwn(b.data,k)&&(b.data[k]===null||typeof b.data[k]==="string"))))throw Error();if(!confirm("Zastąpić obecne postępy danymi z kopii zapasowej?"))return;backupKeys.forEach(k=>b.data[k]==null?localStorage.removeItem(k):localStorage.setItem(k,b.data[k]));location.reload();}catch{alert("Nieprawidłowy plik kopii zapasowej.");}finally{e.target.value="";}});
+    // Patyczki 2.3: aktualizujemy tylko HTML. Przy każdej kolejnej publikacji
+    // zwiększ numer w meta patyczki-version na początku pliku (np. 2.4.0).
+    const APP_VERSION = document.querySelector('meta[name="patyczki-version"]').content;
+    const UPDATE_INTERVAL = 5 * 60 * 1000;
+    let availableVersion = null, checkingUpdate = false, lastUpdateCheck = 0;
+    $("appVersionLabel").textContent = "v" + APP_VERSION;
+    const ADVENT_WELCOME_KEY = "patyczki_advent_welcome_2026_12_01";
+    const ADVENT_WELCOME_TEXT = "Jest to pierwsze okienko kalendarza na 24, jednak zostanie ono z Tobą na całe życie 💝 dobrej zabawy!";
+    let adventWelcomeSeen = false;
+    function isFirstAdvent2026(now) {
+      return now.getFullYear() === 2026 && now.getMonth() === 11 && now.getDate() === 1;
+    }
+    function maybeShowAdventWelcome(now) {
+      const dialog = $("adventWelcome");
+      if (!isFirstAdvent2026(now)) { if(dialog.open) dialog.close(); return; }
+      if (adventWelcomeSeen || dialog.open) return;
+      try { if (localStorage.getItem(ADVENT_WELCOME_KEY) === "1") return; } catch (_) {}
+      $("adventWelcomeText").textContent = ADVENT_WELCOME_TEXT;
+      if (typeof dialog.showModal === "function") dialog.showModal();
+    }
+    $("adventWelcomeClose").addEventListener("click", () => $("adventWelcome").close());
+    $("adventWelcome").addEventListener("close", () => {
+      if (!isFirstAdvent2026(new Date())) return;
+      adventWelcomeSeen = true;
+      try { localStorage.setItem(ADVENT_WELCOME_KEY, "1"); } catch (_) {}
+    });
+    function updateAdventBanner(now = new Date()) {
+      maybeShowAdventWelcome(now);
+      const day = now.getDate();
+      const active = now.getMonth() === 11 && day >= 1 && day <= 24;
+      $("adventBanner").hidden = !active;
+      if (!active) return;
+      $("adventTitle").textContent = day === 6 ? "🎅 Mikołajki – czas na 6. okienko!" : day === 24 ? "🎄 Wigilia – ostatnie, 24. okienko!" : `🎁 Dziś otwierasz ${day}. okienko!`;
+      $("adventSubtitle").textContent = isFirstAdvent2026(now) ? ADVENT_WELCOME_TEXT : day === 24 ? "Wesołych Świąt, Kochanie! ❤️" : "Czas na dzisiejszą niespodziankę! ❤️";
+    }
+    function compareVersions(a,b) {
+      const x = a.split(".").map(Number), y = b.split(".").map(Number);
+      for (let i=0;i<Math.max(x.length,y.length);i++) {
+        const diff=(x[i]||0)-(y[i]||0); if(diff) return Math.sign(diff);
+      }
+      return 0;
+    }
+    function freshAppUrl() {
+      // Ten sam origin i ścieżka – localStorage pozostaje bez zmian.
+      const url = new URL(location.href);
+      url.hash = "";
+      url.searchParams.set("_fresh", String(Date.now()));
+      return url;
+    }
+    function showUpdateState(version) {
+      availableVersion = version;
+      $("updateNotice").hidden = !version;
+      $("installUpdateBtn").hidden = !version;
+      if(version) $("updateNoticeText").textContent = `✨ Dostępna nowa wersja v${version}!`;
+    }
+    async function checkForUpdate(manual = false) {
+      if (checkingUpdate || (!manual && Date.now()-lastUpdateCheck < UPDATE_INTERVAL)) return;
+      if (!/^https?:$/.test(location.protocol)) {
+        $("updateStatus").textContent = "Sprawdzanie aktualizacji działa po opublikowaniu aplikacji w internecie.";
+        return;
+      }
+      checkingUpdate = true; lastUpdateCheck = Date.now();
+      $("checkUpdateBtn").disabled = true;
+      if(manual) $("updateStatus").textContent = "Sprawdzam dostępność nowej wersji…";
+      const controller = new AbortController();
+      const timeout = setTimeout(()=>controller.abort(),12000);
+      try {
+        const response = await fetch(freshAppUrl(), {cache:"no-store", credentials:"same-origin", signal:controller.signal});
+        if(!response.ok) throw new Error("HTTP " + response.status);
+        const html = new DOMParser().parseFromString(await response.text(), "text/html");
+        const version = html.querySelector('meta[name="patyczki-version"]')?.content;
+        if(!version || !/^\d+\.\d+\.\d+$/.test(version)) throw new Error("Nie znaleziono numeru wersji");
+        const newer = compareVersions(version,APP_VERSION)>0;
+        showUpdateState(newer?version:null);
+        $("updateStatus").textContent = newer ? `Dostępna wersja v${version}. Kliknij, aby ją wczytać.` : `Masz aktualną wersję v${APP_VERSION}. 💗`;
+      } catch(error) {
+        $("updateStatus").textContent = "Nie udało się sprawdzić aktualizacji. Spróbuj ponownie po połączeniu z internetem.";
+      } finally {
+        clearTimeout(timeout); checkingUpdate=false; $("checkUpdateBtn").disabled=false;
+      }
+    }
+    function installUpdate() {
+      if(!availableVersion) return;
+      if(isDrawing) { alert("Poczekaj na zakończenie losowania 💕"); return; }
+      if(!confirm("Wczytać nową wersję? Zapisane postępy zostaną zachowane, ale rozpoczęta minigra zostanie przerwana.")) return;
+      location.replace(freshAppUrl().href);
+    }
+    $("checkUpdateBtn").addEventListener("click",()=>checkForUpdate(true));
+    $("installUpdateBtn").addEventListener("click",installUpdate);
+    $("homeUpdateBtn").addEventListener("click",installUpdate);
+    window.addEventListener("online",()=>checkForUpdate(true));
+    window.addEventListener("pageshow",()=>checkForUpdate());
+    document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkForUpdate();});
+    setInterval(()=>{if(!document.hidden)checkForUpdate();},UPDATE_INTERVAL);
     let shownDate=getTodayKey();
     function refreshDate(){if(isDrawing)return;if(shownDate!==getTodayKey()){shownDate=getTodayKey();showHome();}else updateUI();updateBonusStatusBar();}
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshDate();});
@@ -2841,6 +2994,7 @@
 
     initBgHearts();
     updateUI();
+    checkForUpdate();
   </script>
 </body>
 </html>
