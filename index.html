@@ -89,7 +89,7 @@
       100% { transform: translateY(-110vh) rotate(25deg) scale(1.1); opacity: 0; }
     }
 
-    /* Górny pasek: Ulubione po lewej, Dźwięk po prawej */
+    /* Górny pasek: Ulubione po lewej, Gry i Dźwięk po prawej */
     header {
       width: 100%;
       display: flex;
@@ -97,6 +97,13 @@
       align-items: center;
       z-index: 5;
       max-width: 440px;
+      gap: 8px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .pill-btn {
@@ -519,6 +526,13 @@
       font-size: 13px;
       font-weight: 800;
       color: #8f2d52;
+      text-align: center;
+    }
+
+    .daily-hint.bonus-ready {
+      background: linear-gradient(90deg, #fff6cc 0%, #ffe699 100%);
+      border-color: #eab338;
+      color: #633b00;
     }
 
     /* Komunikat po wykorzystaniu 3 losowań na dziś */
@@ -527,15 +541,15 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.78);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1.5px solid rgba(255, 255, 255, 0.92);
       border-radius: 24px;
-      padding: 15px 22px;
+      padding: 16px 22px;
       box-shadow: 0 10px 26px rgba(230, 57, 115, 0.16);
-      max-width: 340px;
-      gap: 4px;
+      max-width: 345px;
+      gap: 6px;
     }
 
     .limit-card.show {
@@ -550,9 +564,29 @@
     }
 
     .limit-card span {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #7d2244;
+      line-height: 1.35;
+    }
+
+    .limit-play-btn {
+      margin-top: 6px;
+      padding: 9px 18px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ff5c93 0%, var(--accent) 100%);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(230, 57, 115, 0.3);
+      transition: transform 0.14s ease;
+    }
+
+    .limit-play-btn:active {
+      transform: scale(0.95);
     }
 
     @keyframes popIn {
@@ -631,11 +665,11 @@
       letter-spacing: 0.4px;
     }
 
-    /* Modal Ulubionych */
+    /* Wspólne style modali (Ulubione + Mini-gry) */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(58, 16, 33, 0.55);
+      background: rgba(58, 16, 33, 0.58);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       display: none;
@@ -651,14 +685,17 @@
     .modal-sheet {
       width: 100%;
       max-width: 480px;
-      max-height: 82dvh;
+      max-height: 92dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       background: linear-gradient(180deg, #fff5f9 0%, #ffe6f0 100%);
       border-radius: 28px 28px 0 0;
-      padding: 20px 20px calc(env(safe-area-inset-bottom) + 24px);
+      padding: 14px 16px calc(env(safe-area-inset-bottom) + 22px);
       box-shadow: 0 -12px 36px rgba(92, 23, 50, 0.25);
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
       animation: slideUpSheet 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -681,6 +718,7 @@
       color: #8f2d52;
     }
 
+    /* Lista Ulubionych */
     .fav-list {
       overflow-y: auto;
       display: flex;
@@ -760,6 +798,207 @@
       flex-shrink: 0;
     }
 
+    /* =========================================================================
+       MINI-GRY (MEMORY + FLAPPY GŁOWA + BONUS TYGODNIOWY)
+       ========================================================================= */
+    .bonus-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(230, 57, 115, 0.18);
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #7d2244;
+    }
+
+    .bonus-status-bar.unlocked {
+      background: linear-gradient(90deg, #fff8d6 0%, #ffe699 100%);
+      border-color: #eab338;
+      color: #633b00;
+    }
+
+    .game-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: rgba(230, 57, 115, 0.1);
+      padding: 4px;
+      border-radius: 16px;
+    }
+
+    .game-tab-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 9px 10px;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #8f2d52;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .game-tab-btn.active {
+      background: #ffffff;
+      color: #c92a60;
+      box-shadow: 0 3px 10px rgba(230, 57, 115, 0.16);
+    }
+
+    .game-panel {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .game-panel.active {
+      display: flex;
+    }
+
+    .game-stats-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #8f2d52;
+    }
+
+    .stat-chip {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+    }
+
+    /* Siatka Memory 4x3 (mieści się w całości na ekranie Android Opera/Chrome) */
+    .memory-grid {
+      width: 100%;
+      max-width: 360px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      perspective: 800px;
+    }
+
+    .mem-card {
+      aspect-ratio: 1 / 1;
+      position: relative;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .mem-card.flipped,
+    .mem-card.matched {
+      transform: rotateY(180deg);
+    }
+
+    .mem-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 14px rgba(138, 43, 77, 0.15);
+      overflow: hidden;
+    }
+
+    .mem-back {
+      background: linear-gradient(145deg, #ff7aa8 0%, #e63973 100%);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      color: #ffffff;
+      font-size: 24px;
+    }
+
+    .mem-front {
+      background: #ffffff;
+      border: 3px solid #ffffff;
+      transform: rotateY(180deg);
+    }
+
+    .mem-card.matched .mem-front {
+      border-color: #4cd97b;
+      box-shadow: 0 0 0 2px rgba(76, 217, 123, 0.35);
+    }
+
+    .mem-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .mem-result-banner {
+      display: none;
+      width: 100%;
+      text-align: center;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid #ff8fb8;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #8f2d52;
+      line-height: 1.4;
+    }
+
+    .mem-result-banner.show {
+      display: block;
+      animation: popIn 0.3s ease;
+    }
+
+    .game-action-btn {
+      padding: 9px 20px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ff5c93 0%, var(--accent) 100%);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 5px 14px rgba(230, 57, 115, 0.28);
+    }
+
+    .game-action-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Flappy Mąż Canvas */
+    .flappy-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      height: min(330px, 46dvh);
+      min-height: 230px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 3px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 10px 26px rgba(138, 43, 77, 0.2);
+      background: linear-gradient(180deg, #ffeaf2 0%, #ffd1e3 100%);
+      touch-action: manipulation;
+    }
+
+    #flappyCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: pointer;
+    }
+
     /* Podgląd zdjęcia na pełnym ekranie po kliknięciu */
     .lightbox {
       position: fixed;
@@ -793,7 +1032,7 @@
       position: fixed;
       pointer-events: none;
       font-size: 22px;
-      z-index: 20;
+      z-index: 70;
       animation: burst 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
@@ -806,6 +1045,7 @@
       .photo-card img { width: 185px; height: 185px; }
       .draw-btn { height: 62px; font-size: 24px; }
       main { gap: 14px; }
+      .flappy-wrap { height: min(275px, 43dvh); }
     }
   </style>
 </head>
@@ -815,7 +1055,10 @@
 
   <header>
     <button class="pill-btn" id="openFavsBtn" aria-label="Ulubione">❤️ Ulubione <span id="favCountBadge"></span></button>
-    <button class="icon-btn" id="soundToggle" aria-label="Dźwięk" title="Włącz/wyłącz dźwięk">🔊</button>
+    <div class="header-right">
+      <button class="pill-btn" id="openGamesBtn" aria-label="Mini-gry">🎮 Gry</button>
+      <button class="icon-btn" id="soundToggle" aria-label="Dźwięk" title="Włącz/wyłącz dźwięk">🔊</button>
+    </div>
   </header>
 
   <div class="anniversary-banner" id="anniversaryBanner">DZIŚ ROCZNICA</div>
@@ -848,12 +1091,13 @@
 
       <div class="limit-card" id="limitCard">
         <strong>Wykorzystałaś już 3 losowania na dziś 🥰</strong>
-        <span>Wróć jutro po kolejną porcję miłości! ❤️</span>
+        <span>Wróć jutro po kolejną porcję miłości — albo zagraj w mini-grę! ❤️</span>
+        <button class="limit-play-btn" id="limitPlayBtn">🎮 Zagraj w mini-grę</button>
       </div>
     </div>
   </main>
 
-  <!-- Wystający z dołu patyczek do wyciągania palcem w górę -->
+  <!-- Wystający z dołu patyczek do wyciągania gestem Swipe Up -->
   <div class="pull-dock" id="pullDock" title="Pociągnij w górę, aby wylosować">
     <div class="pull-stick-tip" id="pullStickTip">
       <span class="pull-arrow">▲</span>
@@ -869,6 +1113,49 @@
         <button class="icon-btn" id="closeFavsBtn" aria-label="Zamknij">✕</button>
       </div>
       <div class="fav-list" id="favList"></div>
+    </div>
+  </div>
+
+  <!-- Modal Mini-gier -->
+  <div class="modal-overlay" id="gamesModal">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Mini-gry dla Ciebie 🎮</h2>
+        <button class="icon-btn" id="closeGamesBtn" aria-label="Zamknij">✕</button>
+      </div>
+
+      <div class="bonus-status-bar" id="bonusStatusBar">
+        <span>🎁 Bonus tygodniowy (+1 los): <strong>do odblokowania</strong></span>
+      </div>
+
+      <div class="game-tabs">
+        <button class="game-tab-btn active" id="tabMemoryBtn">🃏 Nasze Memory</button>
+        <button class="game-tab-btn" id="tabFlappyBtn">🤪 Flappy Mąż</button>
+      </div>
+
+      <!-- PANEL 1: MEMORY Z NASZYMI ZDJĘCIAMI -->
+      <div class="game-panel active" id="panelMemory">
+        <div class="game-stats-row">
+          <span class="stat-chip">Ruchy: <strong id="memMoves">0</strong></span>
+          <span class="stat-chip">Czas: <strong id="memTime">00:00</strong></span>
+          <span class="stat-chip">Rekord: <strong id="memBest">—</strong></span>
+        </div>
+        <div class="memory-grid" id="memoryGrid"></div>
+        <div class="mem-result-banner" id="memResultBanner"></div>
+        <button class="game-action-btn" id="memRestartBtn">Nowe rozdanie 🔄</button>
+      </div>
+
+      <!-- PANEL 2: FLAPPY MĄŻ (twarz-gra.png) -->
+      <div class="game-panel" id="panelFlappy">
+        <div class="game-stats-row">
+          <span class="stat-chip">Wynik: <strong id="flappyScoreHud">0</strong></span>
+          <span class="stat-chip">Cel bonusu: <strong>10 pkt</strong></span>
+          <span class="stat-chip">Rekord: <strong id="flappyBestHud">0</strong></span>
+        </div>
+        <div class="flappy-wrap" id="flappyWrap">
+          <canvas id="flappyCanvas"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -891,7 +1178,7 @@
     ];
 
     // =========================================================================
-    // 2. WASZE WSPÓLNE ZDJĘCIA
+    // 2. WASZE WSPÓLNE ZDJĘCIA ORAZ GŁOWA DO MINI-GRY
     // =========================================================================
     const ZDJECIA = [
       "1.jpg",
@@ -899,8 +1186,14 @@
       "3.jpg",
       "4.jpg",
       "5.jpg",
-      "6.jpg"
+      "6.jpg",
+      "7.jpg",
+      "8.jpg",
+      "9.jpg",
+      "10.jpg"
     ];
+
+    const FLAPPY_HEAD_IMG = "twarz-gra.png";
 
     // =========================================================================
     // 3. ZŁOTE KUPONY (każdy może wypaść maksymalnie raz w miesiącu)
@@ -1028,10 +1321,16 @@
     ];
 
     const LIMIT_DZIENNY = 3;
+    const MEMORY_BONUS_MAX_MOVES = 16;
+    const FLAPPY_BONUS_MIN_SCORE = 10;
+
     const STORAGE_REGULAR_DRAWN = "patyczki_reg_drawn_v4";
     const STORAGE_GOLDEN_MONTH = "patyczki_gold_month_v4";
     const STORAGE_DAILY_KEY = "patyczki_dzis_v4";
     const STORAGE_FAVS_KEY = "patyczki_ulubione_v4";
+    const STORAGE_WEEKLY_BONUS = "patyczki_weekly_bonus_v1";
+    const STORAGE_MEM_BEST = "patyczki_mem_best_v1";
+    const STORAGE_FLAPPY_BEST = "patyczki_flappy_best_v1";
     const SOUND_KEY = "patyczki_dzwiek_v1";
 
     function getTodayKey() {
@@ -1043,14 +1342,24 @@
     }
 
     function getMonthKey() {
-      return getTodayKey().slice(0, 7); // "YYYY-MM"
+      return getTodayKey().slice(0, 7);
     }
 
     function getMonthDayKey() {
-      return getTodayKey().slice(5, 10); // "MM-DD"
+      return getTodayKey().slice(5, 10);
     }
 
-    // Wspólna pula zwykłych patyczków + zdjęć
+    // Klucz tygodnia ISO (poniedziałek - niedziela), np. "2026-W48"
+    function getIsoWeekKey() {
+      const d = new Date();
+      const target = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dayNum = target.getUTCDay() || 7;
+      target.setUTCDate(target.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1));
+      const weekNo = Math.ceil((((target - yearStart) / 86400000) + 1) / 7);
+      return `${target.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+    }
+
     const PULA_ZWYKLA = [
       ...PATYCZKI.map(text => ({ type: "text", value: text })),
       ...ZDJECIA.map(src => ({ type: "photo", value: src }))
@@ -1088,8 +1397,24 @@
       return { date: today, count: 0, lastItem: null };
     }
 
+    function loadWeeklyBonusState() {
+      const wk = getIsoWeekKey();
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_WEEKLY_BONUS) || "null");
+        if (saved && saved.weekKey === wk) {
+          return {
+            weekKey: wk,
+            unlocked: Boolean(saved.unlocked),
+            used: Boolean(saved.used)
+          };
+        }
+      } catch (e) {}
+      return { weekKey: wk, unlocked: false, used: false };
+    }
+
     let goldenMonthState = loadGoldenMonthState();
     let dailyState = loadDailyState();
+    let weeklyBonusState = loadWeeklyBonusState();
     let favorites = JSON.parse(localStorage.getItem(STORAGE_FAVS_KEY) || "[]");
     let currentDisplayedItem = null;
     let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
@@ -1100,6 +1425,7 @@
     const drawBtn = document.getElementById("drawBtn");
     const dailyHint = document.getElementById("dailyHint");
     const limitCard = document.getElementById("limitCard");
+    const limitPlayBtn = document.getElementById("limitPlayBtn");
     const stickWrapper = document.getElementById("stickWrapper");
     const stickText = document.getElementById("stickText");
     const photoCard = document.getElementById("photoCard");
@@ -1116,6 +1442,23 @@
     const jarGlow = document.getElementById("jarGlow");
     const pullDock = document.getElementById("pullDock");
     const pullStickTip = document.getElementById("pullStickTip");
+
+    function hasWeeklyBonusAvailable() {
+      weeklyBonusState = loadWeeklyBonusState();
+      return weeklyBonusState.unlocked && !weeklyBonusState.used;
+    }
+
+    function tryUnlockWeeklyBonus() {
+      weeklyBonusState = loadWeeklyBonusState();
+      if (!weeklyBonusState.unlocked) {
+        weeklyBonusState.unlocked = true;
+        localStorage.setItem(STORAGE_WEEKLY_BONUS, JSON.stringify(weeklyBonusState));
+        updateUI();
+        updateBonusStatusBar();
+        return true;
+      }
+      return false;
+    }
 
     function checkAnniversary() {
       const md = getMonthDayKey();
@@ -1172,6 +1515,27 @@
       gain.connect(ctx.destination);
       osc.start(t);
       osc.stop(t + 0.08);
+    }
+
+    function playSoftPop(freq = 420) {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+
+      const t = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.35, t + 0.07);
+
+      gain.gain.setValueAtTime(0.09, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.09);
     }
 
     function playRevealChime(isGolden = false) {
@@ -1389,16 +1753,24 @@
       }
     }
 
+    function getTotalRemainingDraws() {
+      dailyState = loadDailyState();
+      const regularLeft = Math.max(0, LIMIT_DZIENNY - dailyState.count);
+      const bonusLeft = hasWeeklyBonusAvailable() ? 1 : 0;
+      return { regularLeft, bonusLeft, total: regularLeft + bonusLeft };
+    }
+
     function updateUI() {
       checkAnniversary();
       dailyState = loadDailyState();
       goldenMonthState = loadGoldenMonthState();
+      weeklyBonusState = loadWeeklyBonusState();
       soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
       updateFavHeaderBadge();
 
-      const leftToday = Math.max(0, LIMIT_DZIENNY - dailyState.count);
+      const { regularLeft, bonusLeft, total } = getTotalRemainingDraws();
 
-      if (leftToday === 0) {
+      if (total === 0) {
         drawBtn.style.display = "none";
         dailyHint.style.display = "none";
         limitCard.classList.add("show");
@@ -1410,21 +1782,30 @@
         limitCard.classList.remove("show");
         pullDock.classList.remove("hidden");
         mainArea.classList.remove("no-pull-pad");
-        const word = leftToday === 1 ? "losowanie" : "losowania";
-        dailyHint.textContent = `Dziś pozostało: ${leftToday} z ${LIMIT_DZIENNY} ${word} 💕`;
+
+        if (regularLeft === 0 && bonusLeft === 1) {
+          dailyHint.classList.add("bonus-ready");
+          dailyHint.textContent = "Bonusowe losowanie tygodniowe gotowe! (+1) 🎁✨";
+        } else if (bonusLeft === 1) {
+          dailyHint.classList.add("bonus-ready");
+          const word = regularLeft === 1 ? "losowanie" : "losowania";
+          dailyHint.textContent = `Dziś: ${regularLeft} z ${LIMIT_DZIENNY} ${word} + 1 bonus z gry 🎁`;
+        } else {
+          dailyHint.classList.remove("bonus-ready");
+          const word = regularLeft === 1 ? "losowanie" : "losowania";
+          dailyHint.textContent = `Dziś pozostało: ${regularLeft} z ${LIMIT_DZIENNY} ${word} 💕`;
+        }
       }
     }
 
     function pickNextItem() {
       goldenMonthState = loadGoldenMonthState();
 
-      // Dostępne złote kupony w bieżącym miesiącu
       const availableGolden = [];
       for (let i = 0; i < ZLOTE_KUPONY.length; i++) {
         if (!goldenMonthState.drawn.includes(i)) availableGolden.push(i);
       }
 
-      // Dostępne zwykłe patyczki i zdjęcia
       let availableRegular = [];
       for (let i = 0; i < PULA_ZWYKLA.length; i++) {
         if (!drawnRegularIndices.includes(i)) availableRegular.push(i);
@@ -1434,7 +1815,6 @@
         availableRegular = PULA_ZWYKLA.map((_, i) => i);
       }
 
-      // Łączna pula ważona (dostępne złote kupony + pozostałe zwykłe losy)
       const totalWeight = availableRegular.length + availableGolden.length;
       const roll = Math.floor(Math.random() * totalWeight);
 
@@ -1455,11 +1835,13 @@
     function drawItem() {
       if (isDrawing) return;
 
-      dailyState = loadDailyState();
-      if (dailyState.count >= LIMIT_DZIENNY) {
+      const { regularLeft, bonusLeft, total } = getTotalRemainingDraws();
+      if (total <= 0) {
         updateUI();
         return;
       }
+
+      const usingBonusNow = regularLeft === 0 && bonusLeft === 1;
 
       isDrawing = true;
       drawBtn.disabled = true;
@@ -1480,11 +1862,21 @@
       setTimeout(() => {
         stickWrapper.classList.remove("drawing");
 
-        dailyState = {
-          date: getTodayKey(),
-          count: dailyState.count + 1,
-          lastItem: chosenItem
-        };
+        if (usingBonusNow) {
+          weeklyBonusState.used = true;
+          localStorage.setItem(STORAGE_WEEKLY_BONUS, JSON.stringify(weeklyBonusState));
+          dailyState = {
+            date: getTodayKey(),
+            count: dailyState.count,
+            lastItem: chosenItem
+          };
+        } else {
+          dailyState = {
+            date: getTodayKey(),
+            count: dailyState.count + 1,
+            lastItem: chosenItem
+          };
+        }
         localStorage.setItem(STORAGE_DAILY_KEY, JSON.stringify(dailyState));
 
         renderItem(chosenItem, true);
@@ -1507,7 +1899,7 @@
     let isPulling = false;
 
     pullDock.addEventListener("touchstart", (e) => {
-      if (isDrawing || dailyState.count >= LIMIT_DZIENNY) return;
+      if (isDrawing || getTotalRemainingDraws().total <= 0) return;
       touchStartY = e.touches[0].clientY;
       isPulling = true;
       pullDock.classList.add("dragging");
@@ -1536,7 +1928,7 @@
     });
 
     pullDock.addEventListener("click", () => {
-      if (!isDrawing && dailyState.count < LIMIT_DZIENNY) drawItem();
+      if (!isDrawing && getTotalRemainingDraws().total > 0) drawItem();
     });
 
     drawBtn.addEventListener("click", drawItem);
@@ -1566,6 +1958,628 @@
       if (soundEnabled) playWoodTap(0, 320);
     });
 
+    // =========================================================================
+    // 5. MODUŁ MINI-GIER (MEMORY + FLAPPY MĄŻ + BONUS TYGODNIOWY)
+    // =========================================================================
+    const gamesModal = document.getElementById("gamesModal");
+    const openGamesBtn = document.getElementById("openGamesBtn");
+    const closeGamesBtn = document.getElementById("closeGamesBtn");
+    const bonusStatusBar = document.getElementById("bonusStatusBar");
+    const tabMemoryBtn = document.getElementById("tabMemoryBtn");
+    const tabFlappyBtn = document.getElementById("tabFlappyBtn");
+    const panelMemory = document.getElementById("panelMemory");
+    const panelFlappy = document.getElementById("panelFlappy");
+
+    function updateBonusStatusBar() {
+      weeklyBonusState = loadWeeklyBonusState();
+      if (weeklyBonusState.unlocked && !weeklyBonusState.used) {
+        bonusStatusBar.classList.add("unlocked");
+        bonusStatusBar.innerHTML = `<span>🎁 Bonus tygodniowy (+1 los): <strong>ODBLOKOWANY!</strong> Wróć i kliknij Losuj ✨</span>`;
+      } else if (weeklyBonusState.used) {
+        bonusStatusBar.classList.remove("unlocked");
+        bonusStatusBar.innerHTML = `<span>✅ Bonus tygodniowy wykorzystany — kolejny od poniedziałku!</span>`;
+      } else {
+        bonusStatusBar.classList.remove("unlocked");
+        bonusStatusBar.innerHTML = `<span>🎁 Bonus (+1 los / tydz.): Memory ≤ <strong>${MEMORY_BONUS_MAX_MOVES} ruchów</strong> lub Flappy ≥ <strong>${FLAPPY_BONUS_MIN_SCORE} pkt</strong></span>`;
+      }
+    }
+
+    // --- GRA 1: MEMORY Z NASZYMI ZDJĘCIAMI (tylko zdjęcia 1.jpg - 10.jpg) ---
+    const memoryGrid = document.getElementById("memoryGrid");
+    const memMovesEl = document.getElementById("memMoves");
+    const memTimeEl = document.getElementById("memTime");
+    const memBestEl = document.getElementById("memBest");
+    const memResultBanner = document.getElementById("memResultBanner");
+    const memRestartBtn = document.getElementById("memRestartBtn");
+
+    let memCards = [];
+    let memFlipped = [];
+    let memMatchedCount = 0;
+    let memTotalPairs = 6;
+    let memMoves = 0;
+    let memSeconds = 0;
+    let memTimerId = null;
+    let memLocked = false;
+    let memStarted = false;
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function stopMemoryTimer() {
+      if (memTimerId) {
+        clearInterval(memTimerId);
+        memTimerId = null;
+      }
+    }
+
+    function updateMemoryStats() {
+      memMovesEl.textContent = memMoves;
+      memTimeEl.textContent = formatTime(memSeconds);
+      const best = localStorage.getItem(STORAGE_MEM_BEST);
+      memBestEl.textContent = best ? `${best} r.` : "—";
+    }
+
+    function attachPhotoWithVariants(imgEl, baseSrc) {
+      const baseName = baseSrc.replace(/\.[^.]+$/, "");
+      const variants = [baseSrc, `${baseName}.JPG`, `${baseName}.jpeg`, `${baseName}.JPEG`, `${baseName}.png`];
+      let attempt = 0;
+      imgEl.onerror = () => {
+        attempt++;
+        if (attempt < variants.length) {
+          imgEl.src = variants[attempt];
+        } else {
+          imgEl.onerror = null;
+        }
+      };
+      imgEl.src = variants[0];
+    }
+
+    function initMemoryGame() {
+      stopMemoryTimer();
+      memFlipped = [];
+      memMatchedCount = 0;
+      memMoves = 0;
+      memSeconds = 0;
+      memLocked = false;
+      memStarted = false;
+      memResultBanner.classList.remove("show");
+      updateMemoryStats();
+
+      const shuffledPhotos = [...ZDJECIA];
+      for (let i = shuffledPhotos.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledPhotos[i], shuffledPhotos[j]] = [shuffledPhotos[j], shuffledPhotos[i]];
+      }
+      const selectedPhotos = shuffledPhotos.slice(0, 6);
+      memTotalPairs = selectedPhotos.length;
+
+      const pairs = [];
+      selectedPhotos.forEach((src, idx) => {
+        pairs.push({ pairId: idx, src });
+        pairs.push({ pairId: idx, src });
+      });
+
+      // Tasowanie Fisher-Yates
+      for (let i = pairs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+      }
+
+      memCards = pairs;
+      memoryGrid.innerHTML = "";
+
+      pairs.forEach((cardData, idx) => {
+        const cardEl = document.createElement("div");
+        cardEl.className = "mem-card";
+        cardEl.dataset.index = idx;
+
+        const backEl = document.createElement("div");
+        backEl.className = "mem-face mem-back";
+        backEl.textContent = "❤️";
+
+        const frontEl = document.createElement("div");
+        frontEl.className = "mem-face mem-front";
+
+        const img = document.createElement("img");
+        img.alt = "Nasze zdjęcie";
+        attachPhotoWithVariants(img, cardData.src);
+        frontEl.appendChild(img);
+
+        cardEl.appendChild(backEl);
+        cardEl.appendChild(frontEl);
+
+        cardEl.addEventListener("click", () => handleMemoryCardClick(idx, cardEl));
+        memoryGrid.appendChild(cardEl);
+      });
+    }
+
+    function handleMemoryCardClick(index, cardEl) {
+      if (memLocked) return;
+      if (cardEl.classList.contains("flipped") || cardEl.classList.contains("matched")) return;
+
+      if (!memStarted) {
+        memStarted = true;
+        memTimerId = setInterval(() => {
+          memSeconds++;
+          memTimeEl.textContent = formatTime(memSeconds);
+        }, 1000);
+      }
+
+      playSoftPop(380);
+      cardEl.classList.add("flipped");
+      memFlipped.push({ index, cardEl, pairId: memCards[index].pairId });
+
+      if (memFlipped.length === 2) {
+        memMoves++;
+        memMovesEl.textContent = memMoves;
+        const [first, second] = memFlipped;
+
+        if (first.pairId === second.pairId) {
+          first.cardEl.classList.add("matched");
+          second.cardEl.classList.add("matched");
+          memFlipped = [];
+          memMatchedCount++;
+          playSoftPop(580);
+
+          if (memMatchedCount === memTotalPairs) {
+            stopMemoryTimer();
+            const prevBest = Number(localStorage.getItem(STORAGE_MEM_BEST) || "0");
+            if (!prevBest || memMoves < prevBest) {
+              localStorage.setItem(STORAGE_MEM_BEST, String(memMoves));
+            }
+            updateMemoryStats();
+
+            let msg = `Brawo Kochanie! Ukończono w <strong>${memMoves} ruchach</strong> (${formatTime(memSeconds)}) 🥰`;
+            if (memMoves <= MEMORY_BONUS_MAX_MOVES) {
+              const unlockedNow = tryUnlockWeeklyBonus();
+              if (unlockedNow) {
+                msg += `<br>🎁 <strong>Odblokowałaś dodatkowe losowanie patyczka w tym tygodniu!</strong>`;
+              } else if (hasWeeklyBonusAvailable()) {
+                msg += `<br>🎁 Masz już aktywny bonus +1 losowanie do wykorzystania!`;
+              }
+            } else {
+              msg += `<br>Do bonusu tygodniowego potrzeba maksymalnie ${MEMORY_BONUS_MAX_MOVES} ruchów!`;
+            }
+
+            memResultBanner.innerHTML = msg;
+            memResultBanner.classList.add("show");
+            playRevealChime(true);
+            spawnParticles(memoryGrid, true);
+          }
+        } else {
+          memLocked = true;
+          setTimeout(() => {
+            first.cardEl.classList.remove("flipped");
+            second.cardEl.classList.remove("flipped");
+            memFlipped = [];
+            memLocked = false;
+          }, 720);
+        }
+      }
+    }
+
+    memRestartBtn.addEventListener("click", initMemoryGame);
+
+    // --- GRA 2: FLAPPY MĄŻ (twarz-gra.png) ---
+    const flappyCanvas = document.getElementById("flappyCanvas");
+    const flappyCtx = flappyCanvas.getContext("2d");
+    const flappyScoreHud = document.getElementById("flappyScoreHud");
+    const flappyBestHud = document.getElementById("flappyBestHud");
+
+    const headImage = new Image();
+    let headImageLoaded = false;
+    headImage.onload = () => { headImageLoaded = true; };
+    headImage.onerror = () => { headImageLoaded = false; };
+    headImage.src = FLAPPY_HEAD_IMG;
+
+    let flappyAnimId = null;
+    let flappyLastTs = 0;
+    let flappyState = "ready"; // "ready" | "playing" | "gameover"
+    let flappyScore = 0;
+    let flappyBest = Number(localStorage.getItem(STORAGE_FLAPPY_BEST) || "0");
+    let flappyBonusJustUnlocked = false;
+
+    const bird = { x: 88, y: 170, vy: 0, radius: 22 };
+    let pipes = [];
+    let pipeSpawnTimer = 0;
+
+    function resizeFlappyCanvas() {
+      const rect = flappyCanvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      flappyCanvas.width = Math.max(280, Math.floor(rect.width * dpr));
+      flappyCanvas.height = Math.max(230, Math.floor(rect.height * dpr));
+      flappyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function getFlappyLogicalSize() {
+      const rect = flappyCanvas.parentElement.getBoundingClientRect();
+      return { w: rect.width || 340, h: rect.height || 300 };
+    }
+
+    function resetFlappyGame() {
+      const { h } = getFlappyLogicalSize();
+      bird.x = 84;
+      bird.y = h * 0.45;
+      bird.vy = 0;
+      pipes = [];
+      pipeSpawnTimer = 0.4;
+      flappyScore = 0;
+      flappyBonusJustUnlocked = false;
+      flappyState = "ready";
+      flappyScoreHud.textContent = "0";
+      flappyBestHud.textContent = String(flappyBest);
+    }
+
+    function flapJump() {
+      if (flappyState === "ready") {
+        flappyState = "playing";
+        bird.vy = -335;
+        playSoftPop(430);
+      } else if (flappyState === "playing") {
+        bird.vy = -335;
+        playSoftPop(430);
+      } else if (flappyState === "gameover") {
+        resetFlappyGame();
+        flappyState = "playing";
+        bird.vy = -335;
+        playSoftPop(430);
+      }
+    }
+
+    function spawnPipe(w, h) {
+      const gap = 128;
+      const minTop = 40;
+      const maxTop = Math.max(minTop + 20, h - gap - 48);
+      const topHeight = minTop + Math.random() * (maxTop - minTop);
+      pipes.push({
+        x: w + 24,
+        width: 44,
+        topHeight,
+        gap,
+        passed: false
+      });
+    }
+
+    function drawPopsicleObstacle(ctx, x, y, width, height, isTop) {
+      if (height <= 0) return;
+      const r = Math.min(width / 2, height / 2, 22);
+      ctx.save();
+      ctx.beginPath();
+      if (isTop) {
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + width, y);
+        ctx.lineTo(x + width, y + height - r);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+        ctx.lineTo(x + r, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+      } else {
+        ctx.moveTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.lineTo(x + width - r, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+        ctx.lineTo(x + width, y + height);
+        ctx.lineTo(x, y + height);
+      }
+      ctx.closePath();
+
+      const grad = ctx.createLinearGradient(x, y, x + width, y);
+      grad.addColorStop(0, "#f6dcb8");
+      grad.addColorStop(0.55, "#edd0a6");
+      grad.addColorStop(1, "#dfb884");
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#c89b63";
+      ctx.stroke();
+
+      // Małe wgłębienie na końcu patyczka
+      ctx.beginPath();
+      const dotY = isTop ? y + height - 14 : y + 14;
+      ctx.arc(x + width / 2, dotY, 4, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(150, 102, 50, 0.25)";
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawFlappyRoundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function drawFlappyFrame(w, h) {
+      const ctx = flappyCtx;
+      ctx.clearRect(0, 0, w, h);
+
+      // Delikatne chmurki/serduszka w tle
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.beginPath();
+      ctx.arc(w * 0.22, h * 0.22, 26, 0, Math.PI * 2);
+      ctx.arc(w * 0.30, h * 0.20, 32, 0, Math.PI * 2);
+      ctx.arc(w * 0.38, h * 0.23, 24, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(w * 0.72, h * 0.34, 22, 0, Math.PI * 2);
+      ctx.arc(w * 0.79, h * 0.32, 28, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Przeszkody (drewniane patyczki)
+      pipes.forEach(p => {
+        drawPopsicleObstacle(ctx, p.x, 0, p.width, p.topHeight, true);
+        const botY = p.topHeight + p.gap;
+        drawPopsicleObstacle(ctx, p.x, botY, p.width, h - botY, false);
+      });
+
+      // Gracz: Twoja głowa (twarz-gra.png) w okrągłej ramce
+      ctx.save();
+      ctx.translate(bird.x, bird.y);
+      const angle = Math.max(-0.45, Math.min(0.65, bird.vy / 580));
+      ctx.rotate(angle);
+
+      // Cień pod głową
+      ctx.beginPath();
+      ctx.arc(0, 3, bird.radius + 2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(138, 43, 77, 0.22)";
+      ctx.fill();
+
+      // Okrągłe wycięcie na zdjęcie (z jasnym tłem dla wyciętych grafik PNG)
+      ctx.beginPath();
+      ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.fillStyle = "#fff5f9";
+      ctx.fill();
+      ctx.clip();
+
+      if (headImageLoaded && headImage.naturalWidth > 0) {
+        const iw = headImage.naturalWidth;
+        const ih = headImage.naturalHeight;
+        const side = Math.min(iw, ih);
+        const sx = (iw - side) / 2;
+        const sy = (ih - side) / 2;
+        ctx.drawImage(
+          headImage,
+          sx, sy, side, side,
+          -bird.radius, -bird.radius, bird.radius * 2, bird.radius * 2
+        );
+      } else {
+        ctx.fillStyle = "#ff85b3";
+        ctx.fillRect(-bird.radius, -bird.radius, bird.radius * 2, bird.radius * 2);
+        ctx.font = "28px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("😎", 0, 2);
+      }
+      ctx.restore();
+
+      // Biało-różowa obwódka wokół głowy
+      ctx.save();
+      ctx.translate(bird.x, bird.y);
+      ctx.beginPath();
+      ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+      ctx.restore();
+
+      // Nakładki start / koniec gry
+      if (flappyState === "ready") {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+        drawFlappyRoundRect(ctx, w / 2 - 125, h * 0.66, 250, 56, 18);
+        ctx.fill();
+        ctx.fillStyle = "#8f2d52";
+        ctx.font = "800 14px Nunito, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Dotknij ekranu, aby podbić głowę! 👆", w / 2, h * 0.66 + 24);
+        ctx.font = "700 12px Nunito, sans-serif";
+        ctx.fillText("Omijaj drewniane patyczki", w / 2, h * 0.66 + 43);
+      } else if (flappyState === "gameover") {
+        ctx.fillStyle = "rgba(58, 16, 33, 0.45)";
+        ctx.fillRect(0, 0, w, h);
+
+        const boxW = Math.min(280, w - 32);
+        const boxH = flappyBonusJustUnlocked ? 156 : 132;
+        const bx = (w - boxW) / 2;
+        const by = (h - boxH) / 2;
+
+        ctx.fillStyle = "#fff6fa";
+        drawFlappyRoundRect(ctx, bx, by, boxW, boxH, 22);
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#ff8fb8";
+        ctx.stroke();
+
+        ctx.fillStyle = "#c92a60";
+        ctx.font = "900 18px Nunito, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(`Koniec lotu! Wynik: ${flappyScore}`, w / 2, by + 32);
+
+        ctx.fillStyle = "#7d2244";
+        ctx.font = "800 13.5px Nunito, sans-serif";
+        ctx.fillText(`Najlepszy wynik: ${flappyBest} pkt`, w / 2, by + 56);
+
+        if (flappyBonusJustUnlocked) {
+          ctx.fillStyle = "#9c6200";
+          ctx.font = "900 12.5px Nunito, sans-serif";
+          ctx.fillText("🎁 Odblokowano bonus +1 losowanie!", w / 2, by + 80);
+        }
+
+        // Przycisk "Zagraj ponownie"
+        const btnW = 176;
+        const btnH = 38;
+        const btnX = (w - btnW) / 2;
+        const btnY = by + boxH - 50;
+        ctx.fillStyle = "#e63973";
+        drawFlappyRoundRect(ctx, btnX, btnY, btnW, btnH, 19);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 14px Nunito, sans-serif";
+        ctx.fillText("Zagraj ponownie 🔄", w / 2, btnY + 24);
+      }
+    }
+
+    function triggerFlappyGameOver() {
+      flappyState = "gameover";
+      playWoodTap(0, 160);
+      if (flappyScore > flappyBest) {
+        flappyBest = flappyScore;
+        localStorage.setItem(STORAGE_FLAPPY_BEST, String(flappyBest));
+        flappyBestHud.textContent = String(flappyBest);
+      }
+      if (flappyScore >= FLAPPY_BONUS_MIN_SCORE) {
+        const unlocked = tryUnlockWeeklyBonus();
+        if (unlocked) {
+          flappyBonusJustUnlocked = true;
+          playRevealChime(true);
+          spawnParticles(flappyCanvas, true);
+        }
+      }
+    }
+
+    function flappyLoop(ts) {
+      if (!flappyLastTs) flappyLastTs = ts;
+      const dt = Math.min(0.05, (ts - flappyLastTs) / 1000);
+      flappyLastTs = ts;
+
+      const { w, h } = getFlappyLogicalSize();
+
+      if (flappyState === "ready") {
+        bird.y = h * 0.45 + Math.sin(ts / 260) * 7;
+      } else if (flappyState === "playing") {
+        bird.vy += 940 * dt;
+        bird.y += bird.vy * dt;
+
+        pipeSpawnTimer -= dt;
+        if (pipeSpawnTimer <= 0) {
+          spawnPipe(w, h);
+          pipeSpawnTimer = 1.65;
+        }
+
+        const speed = 155;
+        for (let i = pipes.length - 1; i >= 0; i--) {
+          const p = pipes[i];
+          p.x -= speed * dt;
+
+          // Punktacja
+          if (!p.passed && p.x + p.width < bird.x) {
+            p.passed = true;
+            flappyScore++;
+            flappyScoreHud.textContent = String(flappyScore);
+            playSoftPop(640);
+            if (flappyScore === FLAPPY_BONUS_MIN_SCORE && tryUnlockWeeklyBonus()) {
+              flappyBonusJustUnlocked = true;
+              playRevealChime(true);
+              spawnParticles(flappyCanvas, true);
+            }
+          }
+
+          // Kolizja z patyczkami (z delikatnym marginesem 3 px dla przyjemniejszej gry)
+          const hitR = bird.radius - 3;
+          const withinX = bird.x + hitR > p.x && bird.x - hitR < p.x + p.width;
+          const hitTop = bird.y - hitR < p.topHeight;
+          const hitBot = bird.y + hitR > p.topHeight + p.gap;
+          if (withinX && (hitTop || hitBot)) {
+            triggerFlappyGameOver();
+          }
+
+          if (p.x + p.width < -20) {
+            pipes.splice(i, 1);
+          }
+        }
+
+        // Kolizja z sufitem lub podłogą
+        if (bird.y - bird.radius < 0) {
+          bird.y = bird.radius;
+          bird.vy = 0;
+        }
+        if (bird.y + bird.radius > h) {
+          bird.y = h - bird.radius;
+          triggerFlappyGameOver();
+        }
+      }
+
+      drawFlappyFrame(w, h);
+      flappyAnimId = requestAnimationFrame(flappyLoop);
+    }
+
+    function startFlappyLoop() {
+      stopFlappyLoop();
+      resizeFlappyCanvas();
+      resetFlappyGame();
+      flappyLastTs = 0;
+      flappyAnimId = requestAnimationFrame(flappyLoop);
+    }
+
+    function stopFlappyLoop() {
+      if (flappyAnimId) {
+        cancelAnimationFrame(flappyAnimId);
+        flappyAnimId = null;
+      }
+    }
+
+    flappyCanvas.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      flapJump();
+    });
+
+    // Przełączanie zakładek gier i otwieranie/zamykanie modala
+    function switchGameTab(tabName) {
+      if (tabName === "memory") {
+        tabMemoryBtn.classList.add("active");
+        tabFlappyBtn.classList.remove("active");
+        panelMemory.classList.add("active");
+        panelFlappy.classList.remove("active");
+        stopFlappyLoop();
+      } else {
+        tabFlappyBtn.classList.add("active");
+        tabMemoryBtn.classList.remove("active");
+        panelFlappy.classList.add("active");
+        panelMemory.classList.remove("active");
+        stopMemoryTimer();
+        startFlappyLoop();
+      }
+    }
+
+    function openGamesModal() {
+      updateBonusStatusBar();
+      gamesModal.classList.add("open");
+      if (tabMemoryBtn.classList.contains("active")) {
+        if (memCards.length === 0) initMemoryGame();
+      } else {
+        startFlappyLoop();
+      }
+    }
+
+    function closeGamesModal() {
+      gamesModal.classList.remove("open");
+      stopMemoryTimer();
+      stopFlappyLoop();
+    }
+
+    openGamesBtn.addEventListener("click", openGamesModal);
+    limitPlayBtn.addEventListener("click", openGamesModal);
+    closeGamesBtn.addEventListener("click", closeGamesModal);
+    gamesModal.addEventListener("click", closeGamesModal);
+
+    tabMemoryBtn.addEventListener("click", () => switchGameTab("memory"));
+    tabFlappyBtn.addEventListener("click", () => switchGameTab("flappy"));
+
+    window.addEventListener("resize", () => {
+      if (gamesModal.classList.contains("open") && panelFlappy.classList.contains("active")) {
+        resizeFlappyCanvas();
+      }
+    });
+
+    // Inicjalizacja stanu startowego
     if (dailyState.count > 0 && dailyState.lastItem) {
       renderItem(dailyState.lastItem, false);
     }
