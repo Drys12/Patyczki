@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="robots" content="noindex, nofollow, noimageindex">
-  <meta name="patyczki-version" content="2.4.0">
+  <meta name="patyczki-version" content="2.5.0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Patyczki dla Oli ❤️</title>
 
@@ -1125,6 +1125,38 @@
     .advent-welcome p { font-size:17px; line-height:1.55; font-weight:800; margin:12px 0 21px; }
     .advent-welcome .small-action { min-height:48px; width:100%; font-size:16px; }
 
+  
+    /* Patyczki 2.5 */
+    .nav-inner { grid-template-columns:repeat(6,minmax(0,1fr)); }
+    .nav-btn { font-size:10px; }
+    .game-tabs { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .game-tab-btn { padding:8px 4px; min-height:42px; font-size:12px; }
+    .new-game-help { text-align:center; font-size:13px; color:#8f2d52; line-height:1.4; font-weight:800; }
+    .reflex-pad { width:100%; min-height:150px; height:min(230px,30dvh); border:2px solid white; border-radius:22px; background:#ffe0eb; color:#8f2d52; font:900 20px Nunito,sans-serif; padding:15px; touch-action:manipulation; cursor:pointer; }
+    .reflex-pad.waiting { background:#a63c5e; color:white; }
+    .reflex-pad.go { background:#218653; color:white; }
+    .reflex-pad:disabled { opacity:1; cursor:default; }
+    .karate-arena { width:100%; max-width:350px; display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .karate-cell { aspect-ratio:1; border:2px solid white; border-radius:17px; background:#f5c6d8; font-size:30px; color:#8f2d52; cursor:pointer; touch-action:manipulation; }
+    .karate-cell.target { background:#ffedb3; border-color:#d99326; box-shadow:0 3px 10px #d9932640; }
+    .crush-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); width:100%; max-width:min(350px,44dvh); gap:4px; touch-action:manipulation; }
+    .crush-cell { aspect-ratio:1; min-width:0; display:grid; place-items:center; font-size:clamp(16px,5.5vw,28px); padding:0; border:2px solid #fff; border-radius:10px; background:#fff6fa; cursor:pointer; }
+    .crush-cell.selected { border-color:#b72662; background:#ffd1e4; box-shadow:inset 0 0 0 1px #b72662; }
+    .crush-cell.clearing { opacity:.25; transform:scale(.65); transition:transform .13s,opacity .13s; }
+    .achievement-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    .achievement { border:1px solid #edccda; border-radius:16px; padding:12px 8px; background:#fff9; text-align:center; display:flex; flex-direction:column; align-items:center; gap:5px; color:#8f2d52; }
+    .achievement.unlocked { background:#fff9e7; border-color:#e9c66b; }
+    .achievement .medal { font-size:28px; } .achievement:not(.unlocked) .medal { filter:grayscale(1); opacity:.65; }
+    .achievement strong { font-size:13px; } .achievement small { font-size:11px; line-height:1.35; }
+    .timeline { margin:4px 0 0 13px; padding-left:19px; border-left:2px solid #e6a4bb; display:grid; gap:10px; }
+    .timeline-event { position:relative; background:#fff; border-radius:15px; padding:12px; color:#8f2d52; }
+    .timeline-event:before { content:''; position:absolute; left:-26px; top:19px; width:12px; height:12px; border-radius:50%; background:#e63973; border:2px solid white; }
+    .timeline-event small { display:block; color:#a14b6c; font-weight:800; margin-bottom:4px; }
+    .achievement-progress { height:8px; background:#efcfdd; border-radius:10px; overflow:hidden; }
+    .achievement-progress div { background:#e63973; height:100%; border-radius:10px; }
+    .our-tabs { grid-template-columns:1fr 1fr; }
+    .new-game-result { min-height:20px; font-size:13px; font-weight:800; color:#8f2d52; text-align:center; }
+    [hidden] { display:none !important; }
   </style>
 </head>
 <body>
@@ -1233,6 +1265,7 @@
 <button class="nav-btn" id="openCouponsBtn" aria-label="Kupony"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v4a3 3 0 0 0 0 6v4H4v-4a3 3 0 0 0 0-6Z"/><path d="M14 5v2m0 4v2m0 4v2"/></svg><span>Kupony</span></button>
 <button class="nav-btn" id="openGamesBtn" aria-label="Gry"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12c3 0 5 8 3 10-2 2-4-2-6-2H9c-2 0-4 4-6 2-2-2 0-10 3-10Z"/><path d="M7 10v4m-2-2h4m7-1h.01M19 13h.01"/></svg><span>Gry</span></button>
 <button class="nav-btn" id="openAlbumBtn" aria-label="Album"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m21 16-6-6L5 21"/></svg><span>Album</span></button>
+<button class="nav-btn" id="openOurBtn" aria-label="Nasza historia i osiągnięcia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 3.5 12.5a5 5 0 0 1 7-7L12 7l1.5-1.5a5 5 0 0 1 7 7Z"/><path d="M8 12h8m-4-4v8"/></svg><span>My</span></button>
 </div></nav>
   <!-- Modal Ulubionych -->
   <div class="modal-overlay" id="favModal">
@@ -1260,6 +1293,9 @@
       <div class="game-tabs">
         <button class="game-tab-btn active" id="tabMemoryBtn">🃏 Nasze Memory</button>
         <button class="game-tab-btn" id="tabFlappyBtn">🤪 Flappy Mąż</button>
+        <button class="game-tab-btn" id="tabReflexBtn">⚡ Refleks</button>
+        <button class="game-tab-btn" id="tabKarateBtn">🥋 Karate Ola</button>
+        <button class="game-tab-btn" id="tabCrushBtn">💕 Heart Crush</button>
       </div>
 
       <!-- PANEL 1: MEMORY Z NASZYMI ZDJĘCIAMI (16 kart = 8 losowych zdjęć) -->
@@ -1285,10 +1321,36 @@
           <canvas id="flappyCanvas"></canvas>
         </div>
       </div>
+      <div class="game-panel" id="panelReflex">
+        <p class="new-game-help">Dotknij pola dopiero, gdy zrobi się zielone! 5 prób, liczy się średnia. Przedwczesne dotknięcie powtarza próbę.</p>
+        <div class="game-stats-row"><span class="stat-chip" id="reflexRound">Próba: 0/5</span><span class="stat-chip" id="reflexBest">Rekord: —</span></div>
+        <button class="reflex-pad" id="reflexPad" disabled>Gotowa?</button>
+        <p class="new-game-result" id="reflexResult" aria-live="polite"></p>
+        <button class="game-action-btn" id="reflexStart">Rozpocznij ⚡</button>
+      </div>
+      <div class="game-panel" id="panelKarate">
+        <p class="new-game-help">Trafiaj w pojawiające się tarcze 🎯 przez 30 sekund. Za trafienie +1, za pustą kratkę −1 (minimum 0).</p>
+        <div class="game-stats-row"><span class="stat-chip" id="karateTime">30 s</span><span class="stat-chip" id="karateScore">0 pkt</span><span class="stat-chip" id="karateBest">Rekord: 0</span></div>
+        <div class="karate-arena" id="karateArena"></div>
+        <p class="new-game-result" id="karateResult" aria-live="polite"></p>
+        <button class="game-action-btn" id="karateStart">Do walki! 🥋</button>
+      </div>
+      <div class="game-panel" id="panelCrush">
+        <p class="new-game-help">Zaznacz dwa sąsiednie serduszka, aby je zamienić. Połącz minimum 3 w linii. Masz 20 udanych ruchów!</p>
+        <div class="game-stats-row"><span class="stat-chip" id="crushMoves">Ruchy: 20</span><span class="stat-chip" id="crushScore">0 pkt</span><span class="stat-chip" id="crushBest">Rekord: 0</span></div>
+        <div class="crush-grid" id="crushGrid"></div>
+        <p class="new-game-result" id="crushResult" aria-live="polite"></p>
+        <button class="game-action-btn" id="crushStart">Nowa gra 💕</button>
+      </div>
     </div>
   </div>
 
-
+  <div class="modal-overlay" id="ourModal" role="dialog" aria-modal="true" aria-label="Nasza historia i osiągnięcia"><section class="modal-sheet">
+    <div class="modal-header"><h2>Nasze małe szczęście 💞</h2><button class="icon-btn" data-close="ourModal" aria-label="Zamknij">✕</button></div>
+    <div class="game-tabs our-tabs"><button class="game-tab-btn active" id="ourTimelineBtn">💍 Nasza historia</button><button class="game-tab-btn" id="ourAchBtn">🏆 Osiągnięcia</button></div>
+    <section id="ourTimeline"><p class="modal-subtitle">Nasze pierwsze razy i wyjątkowe daty. Kolejne wspomnienia jeszcze przed nami!</p><div class="timeline" id="timelineList"></div></section>
+    <section id="ourAch" hidden><p class="modal-subtitle" id="achievementSummary"></p><div class="achievement-progress"><div id="achievementProgress"></div></div><div class="achievement-grid" id="achievementGrid" style="margin-top:10px"></div><p class="modal-subtitle">Nie ma serii do utrzymania – odkrywaj wszystko w swoim tempie 💗</p></section>
+  </section></div>
   <div class="modal-overlay" id="couponsModal" role="dialog" aria-modal="true" aria-label="Złote kupony"><section class="modal-sheet">
     <div class="modal-header"><h2>🎟️ Złote kupony</h2><button class="icon-btn" data-close="couponsModal" aria-label="Zamknij">✕</button></div>
     <p class="modal-subtitle" id="couponSummary"></p><div class="archive-list" id="couponList"></div>
@@ -1800,7 +1862,7 @@
       }
       localStorage.setItem(STORAGE_FAVS_KEY, JSON.stringify(favorites));
       updateFavActionBtn();
-      updateFavHeaderBadge();
+      updateFavHeaderBadge(); evaluateAchievements();
     }
 
     function renderFavoritesList() {
@@ -2330,6 +2392,7 @@
               localStorage.setItem(STORAGE_MEM_BEST, String(memMoves));
             }
             updateMemoryStats();
+            finishGame("memory");
 
             let msg = `Brawo Kochanie! Ukończono w <strong>${memMoves} ruchach</strong> (${formatTime(memSeconds)}) 🥰`;
             if (memMoves <= MEMORY_BONUS_MAX_MOVES) {
@@ -2634,6 +2697,7 @@
         localStorage.setItem(STORAGE_FLAPPY_BEST, String(flappyBest));
         flappyBestHud.textContent = String(flappyBest);
       }
+      finishGame("flappy");
       if (flappyScore >= FLAPPY_BONUS_MIN_SCORE) {
         const unlocked = tryUnlockWeeklyBonus();
         if (unlocked) {
@@ -2731,38 +2795,25 @@
     });
 
     // Przełączanie zakładek gier i otwieranie/zamykanie modala
+    let selectedGame = "memory";
     function switchGameTab(tabName) {
-      if (tabName === "memory") {
-        tabMemoryBtn.classList.add("active");
-        tabFlappyBtn.classList.remove("active");
-        panelMemory.classList.add("active");
-        panelFlappy.classList.remove("active");
-        stopFlappyLoop();
-        if (!memCards.length) initMemoryGame(); else resumeMemoryTimer();
-      } else {
-        tabFlappyBtn.classList.add("active");
-        tabMemoryBtn.classList.remove("active");
-        panelFlappy.classList.add("active");
-        panelMemory.classList.remove("active");
-        stopMemoryTimer();
-        startFlappyLoop();
-      }
+      stopMemoryTimer(); stopFlappyLoop(); stopExtraGames();
+      selectedGame = tabName;
+      const names = {memory:"Memory",flappy:"Flappy",reflex:"Reflex",karate:"Karate",crush:"Crush"};
+      Object.entries(names).forEach(([key,name])=>{
+        $("tab"+name+"Btn").classList.toggle("active",key===tabName);
+        $("panel"+name).classList.toggle("active",key===tabName);
+      });
+      if(tabName==="memory") { if(!memCards.length)initMemoryGame();else resumeMemoryTimer(); }
+      if(tabName==="flappy") startFlappyLoop();
+      if(tabName==="crush" && !crushBoard.length) initCrush();
+      refreshExtraHud();
     }
-
     function openGamesModal() {
-      updateBonusStatusBar();
-      gamesModal.classList.add("open");
-      if (tabMemoryBtn.classList.contains("active")) {
-        if (memCards.length === 0) initMemoryGame(); else resumeMemoryTimer();
-      } else {
-        startFlappyLoop();
-      }
+      updateBonusStatusBar(); gamesModal.classList.add("open"); switchGameTab(selectedGame);
     }
-
     function closeGamesModal() {
-      gamesModal.classList.remove("open");
-      stopMemoryTimer();
-      stopFlappyLoop();
+      gamesModal.classList.remove("open"); stopMemoryTimer(); stopFlappyLoop(); stopExtraGames();
     }
 
     openGamesBtn.addEventListener("click", openGamesModal);
@@ -2772,6 +2823,7 @@
 
     tabMemoryBtn.addEventListener("click", () => switchGameTab("memory"));
     tabFlappyBtn.addEventListener("click", () => switchGameTab("flappy"));
+    ["reflex","karate","crush"].forEach(name=>document.getElementById("tab"+name[0].toUpperCase()+name.slice(1)+"Btn").addEventListener("click",()=>switchGameTab(name)));
 
     window.addEventListener("resize", () => {
       if (gamesModal.classList.contains("open") && panelFlappy.classList.contains("active")) {
@@ -2816,6 +2868,7 @@
       if (item.type === "photo" && !album.includes(item.value)) album.push(item.value);
       if (item.type === "golden") wallet.unshift({id,date,value:item.value,used:false});
       persistArchives();
+      evaluateAchievements();
     }
     function updateHomeDecor(regularLeft, bonusLeft) {
       const now = new Date();
@@ -2849,7 +2902,7 @@
         const title=document.createElement("strong");title.textContent=c.value;
         const date=document.createElement("small");date.textContent=c.used?"✓ Wykorzystany"+(c.usedDate?" · "+localDate(c.usedDate):""):c.date?"Wylosowano: "+localDate(c.date):"Z wcześniejszej wersji · status do sprawdzenia";
         const btn=document.createElement("button");btn.className="small-action"+(c.used?" secondary":"");btn.textContent=c.used?"Cofnij wykorzystanie":"Oznacz jako wykorzystany";
-        btn.addEventListener("click",()=>{if(!c.used&&!confirm("Czy ten kupon został już zrealizowany?"))return;c.used=!c.used;c.usedDate=c.used?getTodayKey():null;persistArchives();renderCoupons();});
+        btn.addEventListener("click",()=>{if(!c.used&&!confirm("Czy ten kupon został już zrealizowany?"))return;c.used=!c.used;c.usedDate=c.used?getTodayKey():null;persistArchives();evaluateAchievements();renderCoupons();});
         card.append(title,date,btn);list.append(card);
       });
     }
@@ -2866,7 +2919,7 @@
       const list=$("historyList");list.replaceChildren();if(!history.length)return emptyMessage(list,"Jeszcze nie ma nowych losowań 💕");
       history.forEach(h=>{const row=document.createElement("div");row.className="fav-item"+(h.type==="golden"?" golden":"");const content=document.createElement("div");content.className="fav-item-content";if(h.type==="photo"){const img=document.createElement("img");img.className="fav-thumb";img.alt="Wspólne zdjęcie";attachPhotoWithVariants(img,h.value);img.addEventListener("click",()=>{if(img.naturalWidth){lightboxImg.src=img.src;lightbox.classList.add("open");}});content.append(img);}const title=document.createElement("div");title.className="fav-item-text";title.textContent=h.type==="photo"?photoCaption(h.value):h.value;const date=document.createElement("small");date.className="history-date";date.textContent=h.date?localDate(h.date):"";title.append(date);content.append(title);row.append(content);list.append(row);});
     }
-    const modalNav={favModal:"openFavsBtn",couponsModal:"openCouponsBtn",gamesModal:"openGamesBtn",albumModal:"openAlbumBtn"};
+    const modalNav={favModal:"openFavsBtn",couponsModal:"openCouponsBtn",gamesModal:"openGamesBtn",albumModal:"openAlbumBtn",ourModal:"openOurBtn"};
     const allModals=[...document.querySelectorAll(".modal-overlay")];
     function openExtra(id,render){render?.();$(id).classList.add("open");}
     $("openCouponsBtn").addEventListener("click",()=>openExtra("couponsModal",renderCoupons));
@@ -2882,10 +2935,12 @@
     });
     allModals.forEach(m=>observer.observe(m,{attributes:true,attributeFilter:["class"]}));
     document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(lightbox.classList.contains("open")){lightbox.classList.remove("open");return;}allModals.forEach(m=>{if(m.id==="gamesModal" && m.classList.contains("open"))closeGamesModal();else m.classList.remove("open");});});
-    const backupKeys=[STORAGE_REGULAR_DRAWN,STORAGE_GOLDEN_MONTH,STORAGE_DAILY_KEY,STORAGE_FAVS_KEY,STORAGE_WEEKLY_BONUS,STORAGE_MEM_BEST_LEGACY,STORAGE_MEM_BEST,STORAGE_FLAPPY_BEST,SOUND_KEY,WALLET_KEY,ALBUM_KEY,HISTORY_KEY,MIGRATION_KEY];
+    const ACH_KEY="patyczki_achievements_v1", GAME_STATS_KEY="patyczki_extra_stats_v1";
+    const optionalBackupKeys=[STORAGE_MEM_BEST,ACH_KEY,GAME_STATS_KEY,"patyczki_advent_welcome_2026_12_01"];
+    const backupKeys=[ACH_KEY,GAME_STATS_KEY,"patyczki_advent_welcome_2026_12_01",STORAGE_REGULAR_DRAWN,STORAGE_GOLDEN_MONTH,STORAGE_DAILY_KEY,STORAGE_FAVS_KEY,STORAGE_WEEKLY_BONUS,STORAGE_MEM_BEST_LEGACY,STORAGE_MEM_BEST,STORAGE_FLAPPY_BEST,SOUND_KEY,WALLET_KEY,ALBUM_KEY,HISTORY_KEY,MIGRATION_KEY];
     $("exportBtn").addEventListener("click",()=>{const data=Object.fromEntries(backupKeys.map(k=>[k,localStorage.getItem(k)]));const url=URL.createObjectURL(new Blob([JSON.stringify({app:"Patyczki",version:2,data},null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download=`patyczki-${getTodayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
     $("importBtn").addEventListener("click",()=>$("importFile").click());
-    $("importFile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const b=JSON.parse(await file.text());if(b.app!=="Patyczki"||b.version!==2||!b.data||!backupKeys.every(k=>(k===STORAGE_MEM_BEST&&!Object.hasOwn(b.data,k))||(Object.hasOwn(b.data,k)&&(b.data[k]===null||typeof b.data[k]==="string"))))throw Error();if(!confirm("Zastąpić obecne postępy danymi z kopii zapasowej?"))return;backupKeys.forEach(k=>b.data[k]==null?localStorage.removeItem(k):localStorage.setItem(k,b.data[k]));location.reload();}catch{alert("Nieprawidłowy plik kopii zapasowej.");}finally{e.target.value="";}});
+    $("importFile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const b=JSON.parse(await file.text());if(b.app!=="Patyczki"||b.version!==2||!b.data||!backupKeys.every(k=>(optionalBackupKeys.includes(k)&&!Object.hasOwn(b.data,k))||(Object.hasOwn(b.data,k)&&(b.data[k]===null||typeof b.data[k]==="string"))))throw Error();if(!confirm("Zastąpić obecne postępy danymi z kopii zapasowej?"))return;backupKeys.forEach(k=>{if(!Object.hasOwn(b.data,k))return;b.data[k]==null?localStorage.removeItem(k):localStorage.setItem(k,b.data[k]);});location.reload();}catch{alert("Nieprawidłowy plik kopii zapasowej.");}finally{e.target.value="";}});
     // Patyczki 2.3: aktualizujemy tylko HTML. Przy każdej kolejnej publikacji
     // zwiększ numer w meta patyczki-version na początku pliku (np. 2.4.0).
     const APP_VERSION = document.querySelector('meta[name="patyczki-version"]').content;
@@ -2986,6 +3041,80 @@
     window.addEventListener("pageshow",refreshDate);
     setInterval(()=>{if(!document.hidden)refreshDate();},30000);
     migrateArchives();
+    // Patyczki 2.5 – nowe gry, osiągnięcia i historia
+    function safeObject(key) {try{const x=JSON.parse(localStorage.getItem(key)||"{}");return x&&typeof x==="object"&&!Array.isArray(x)?x:{};}catch{return {};}}
+    let gameStats=safeObject(GAME_STATS_KEY), achievements=safeObject(ACH_KEY);
+    const numberStat=k=>Math.max(0,Number(gameStats[k])||0);
+    const bestStored=k=>Math.max(0,Number(localStorage.getItem(k))||0);
+    const totalKnownDraws=()=>Math.max(history.length, drawnRegularIndices.length+wallet.length);
+    const achDefs=[
+      ["first","🐣","Pierwszy patyczek","Pierwsze znane losowanie",()=>totalKnownDraws()>0],
+      ["ten","💞","Dziesięć uśmiechów","10 losowań",()=>totalKnownDraws()>=10],
+      ["hundred","💯","Sto powodów","100 losowań",()=>totalKnownDraws()>=100],
+      ["gold","💛","Złota Żonka","Pierwszy złoty kupon",()=>wallet.length>0],
+      ["coupon5","👑","Królowa kuponów","5 zrealizowanych kuponów",()=>wallet.filter(c=>c.used).length>=5],
+      ["photo","📸","Pierwsze wspomnienie","Odkryj pierwsze zdjęcie",()=>album.length>0],
+      ["album","🖼️","Kolekcjonerka","Odkryj wszystkie zdjęcia",()=>album.length>=ZDJECIA.length],
+      ["fav25","💖","Romantyczka","25 ulubionych",()=>favorites.length>=25],
+      ["memory","🧠","Mistrzyni pamięci","Memory w maks. 12 ruchach",()=>bestStored(STORAGE_MEM_BEST)>0&&bestStored(STORAGE_MEM_BEST)<=12],
+      ["flappy","🚀","Latający Mąż","25 punktów we Flappy",()=>bestStored(STORAGE_FLAPPY_BEST)>=25],
+      ["reflex","⚡","Błyskawica","Średni refleks do 300 ms",()=>numberStat("reflexBest")>0&&numberStat("reflexBest")<=300],
+      ["karate","🥋","Sensei Ola","25 punktów w Karate Ola",()=>numberStat("karateBest")>=25],
+      ["crush","💕","Królowa serduszek","1000 punktów w Heart Crush",()=>numberStat("crushBest")>=1000],
+      ["games","🎮","Gamerka","25 ukończonych gier od wersji 2.5",()=>numberStat("completed")>=25],
+      ["wedding","💍","Na zawsze","Losowanie w rocznicę ślubu",()=>history.some(h=>h.date?.slice(5)==="08-31")],
+      ["christmas","🎄","Świąteczna Żonka","Losowanie w Wigilię",()=>history.some(h=>h.date?.slice(5)==="12-24")]
+    ];
+    function evaluateAchievements(){let changed=false;for(const [id,emoji,title,desc,condition] of achDefs){if(!achievements[id]&&condition()){achievements[id]=getTodayKey();changed=true;}}if(changed)localStorage.setItem(ACH_KEY,JSON.stringify(achievements));if($("ourModal").classList.contains("open")&&!$("ourAch").hidden)renderAchievements(false);}
+    function renderAchievements(check=true){if(check)evaluateAchievements();const count=achDefs.filter(a=>achievements[a[0]]).length;$("achievementSummary").textContent=`Odblokowano ${count} z ${achDefs.length} odznak`;$("achievementProgress").style.width=`${100*count/achDefs.length}%`;const grid=$("achievementGrid");grid.replaceChildren();for(const [id,emoji,title,desc] of achDefs){const unlocked=!!achievements[id];const tile=document.createElement("article");tile.className="achievement"+(unlocked?" unlocked":"");const medal=document.createElement("span");medal.className="medal";medal.textContent=emoji;const name=document.createElement("strong");name.textContent=title;const detail=document.createElement("small");detail.textContent=desc;const status=document.createElement("small");status.textContent=unlocked?"✓ Odblokowano: "+localDate(achievements[id]):"🔒 Do odkrycia";tile.append(medal,name,detail,status);grid.append(tile);}}
+    const OUR_TIMELINE=[
+      {date:"1 kwietnia",text:"Pierwsze zapytanie o randkę",emoji:"💌"},
+      {date:"25 kwietnia",text:"Pierwsze spotkanie",emoji:"🥰"},
+      {date:"20 czerwca",text:"Rozpoczęcie związku",emoji:"❤️"},
+      {date:"10 lipca",text:"Pierwsze „kocham Cię”",emoji:"💞"},
+      {date:"9 maja",text:"Zaręczyny",emoji:"💎"},
+      {date:"31 sierpnia 2024",text:"Nasz ślub",emoji:"💍"}
+    ];
+    function renderTimeline(){const list=$("timelineList");list.replaceChildren();for(const event of OUR_TIMELINE){const el=document.createElement("article");el.className="timeline-event";const date=document.createElement("small");date.textContent=event.date;const title=document.createElement("strong");title.textContent=event.emoji+" "+event.text;el.append(date,title);list.append(el);}}
+    function ourTab(ach){$("ourTimeline").hidden=ach;$("ourAch").hidden=!ach;$("ourTimelineBtn").classList.toggle("active",!ach);$("ourAchBtn").classList.toggle("active",ach);if(ach)renderAchievements();else renderTimeline();}
+    $("openOurBtn").addEventListener("click",()=>openExtra("ourModal",()=>ourTab(false)));
+    $("ourTimelineBtn").addEventListener("click",()=>ourTab(false));$("ourAchBtn").addEventListener("click",()=>ourTab(true));
+    function finishGame(kind,score){gameStats.completed=numberStat("completed")+1;gameStats[kind+"Played"]=numberStat(kind+"Played")+1;if(Number.isFinite(score)){const key=kind+"Best",old=numberStat(key);gameStats[key]=kind==="reflex"?(old?Math.min(old,score):score):Math.max(old,score);}localStorage.setItem(GAME_STATS_KEY,JSON.stringify(gameStats));evaluateAchievements();refreshExtraHud();}
+    function refreshExtraHud(){ $("reflexBest").textContent="Rekord: "+(numberStat("reflexBest")?numberStat("reflexBest")+" ms":"—");$("karateBest").textContent="Rekord: "+numberStat("karateBest");$("crushBest").textContent="Rekord: "+numberStat("crushBest"); }
+    // Refleks: monotoniczny zegar, 5 prawidłowych prób; opuszczenie zakładki anuluje sesję.
+    let reflexState="idle", reflexTimer=null, reflexTimes=[], reflexAt=0;
+    function stopReflex(){clearTimeout(reflexTimer);reflexTimer=null;if(reflexState!=="idle"){reflexState="idle";$("reflexPad").className="reflex-pad";$("reflexPad").disabled=true;$("reflexPad").textContent="Gotowa?";$("reflexStart").disabled=false;$("reflexStart").textContent="Rozpocznij ⚡";$("reflexResult").textContent="Próba przerwana";$("reflexRound").textContent="Próba: 0/5";}}
+    function armReflex(){reflexState="waiting";const pad=$("reflexPad");pad.disabled=false;pad.className="reflex-pad waiting";pad.textContent="Czekaj…";$("reflexRound").textContent=`Próba: ${reflexTimes.length+1}/5`;reflexTimer=setTimeout(()=>{reflexState="go";pad.className="reflex-pad go";pad.textContent="TERAZ! ⚡";reflexAt=performance.now();},1100+Math.random()*2500);}
+    $("reflexStart").addEventListener("click",()=>{stopReflex();reflexTimes=[];$("reflexResult").textContent="";$("reflexStart").disabled=true;armReflex();});
+    function reflexTap(){if(reflexState==="waiting"){clearTimeout(reflexTimer);$("reflexResult").textContent="Za wcześnie! Spróbuj jeszcze raz";armReflex();return;}if(reflexState!=="go")return;const ms=Math.max(1,Math.round(performance.now()-reflexAt));reflexTimes.push(ms);$("reflexResult").textContent=`Ostatnia próba: ${ms} ms`;if(reflexTimes.length<5){armReflex();return;}reflexState="idle";const avg=Math.round(reflexTimes.reduce((a,b)=>a+b,0)/5);$("reflexPad").className="reflex-pad";$("reflexPad").textContent=`Średnia: ${avg} ms`;$("reflexPad").disabled=true;$("reflexResult").textContent=`Brawo! Najszybsza próba: ${Math.min(...reflexTimes)} ms`;$("reflexStart").disabled=false;$("reflexStart").textContent="Zagraj ponownie ⚡";finishGame("reflex",avg);}
+    $("reflexPad").addEventListener("pointerdown",e=>{if(e.button===0){e.preventDefault();reflexTap();}});$("reflexPad").addEventListener("click",e=>{if(e.detail===0)reflexTap();});
+    // Karate: tarcza znika po upływie czasu lub trafieniu. Bez wielokrotnego punktowania tej samej tarczy.
+    let karateRunning=false, karateTarget=-1, karatePoints=0, karateEnd=0, karateTick=null, karateSpawn=null;
+    const karateCells=Array.from({length:9},(_,i)=>{const b=document.createElement("button");b.className="karate-cell";b.type="button";b.setAttribute("aria-label",`Pole ${i+1}`);b.textContent="·";b.addEventListener("click",()=>hitKarate(i));$("karateArena").append(b);return b;});
+    function paintKarate(){karateCells.forEach((b,i)=>{b.classList.toggle("target",i===karateTarget);b.textContent=i===karateTarget?"🎯":"·";b.disabled=!karateRunning;b.setAttribute("aria-label",i===karateTarget?`Tarcza, pole ${i+1}`:`Pole ${i+1}`);});$("karateScore").textContent=karatePoints+" pkt";}
+    function nextKarateTarget(){if(!karateRunning)return;clearTimeout(karateSpawn);const prev=karateTarget;do{karateTarget=Math.floor(Math.random()*9);}while(karateTarget===prev);paintKarate();karateSpawn=setTimeout(nextKarateTarget,Math.max(420,1000-karatePoints*17));}
+    function hitKarate(i){if(!karateRunning)return;if(performance.now()>=karateEnd){endKarate();return;}if(i===karateTarget){karatePoints++;playSoftPop(500);nextKarateTarget();}else{karatePoints=Math.max(0,karatePoints-1);paintKarate();}}
+    function stopKarate(){clearInterval(karateTick);clearTimeout(karateSpawn);if(karateRunning)$("karateResult").textContent="Runda przerwana";karateRunning=false;karateTarget=-1;$("karateStart").disabled=false;paintKarate();}
+    function endKarate(){if(!karateRunning)return;stopKarate();$("karateTime").textContent="0 s";$("karateResult").textContent=`Brawo, Karateczko! ${karatePoints} pkt 🥋`;finishGame("karate",karatePoints);}
+    $("karateStart").addEventListener("click",()=>{stopKarate();karateRunning=true;karatePoints=0;karateEnd=performance.now()+30000;$("karateTime").textContent="30 s";$("karateResult").textContent="";$("karateStart").disabled=true;nextKarateTarget();karateTick=setInterval(()=>{const left=Math.max(0,Math.ceil((karateEnd-performance.now())/1000));$("karateTime").textContent=left+" s";if(!left)endKarate();},100);});
+    paintKarate();
+    // Heart Crush: plansza 6x6, legalne zamiany, kaskady, grawitacja i automatyczne przetasowanie bez ruchów.
+    const CRUSH_N=6, CRUSH_ICONS=["❤️","💜","💙","💚","💛","🩷"];
+    let crushBoard=[], crushSelected=-1, crushMoves=20, crushPoints=0, crushBusy=false, crushFinished=false, crushEpoch=0;
+    function crushMatches(board){const found=new Set();for(let r=0;r<6;r++)for(let c=0;c<6;c++){const i=r*6+c,v=board[i];if(v<0)continue;if(c<=3&&board[i+1]===v&&board[i+2]===v){found.add(i);found.add(i+1);found.add(i+2);}if(r<=3&&board[i+6]===v&&board[i+12]===v){found.add(i);found.add(i+6);found.add(i+12);}}return found;}
+    function swapTiles(board,a,b){[board[a],board[b]]=[board[b],board[a]];}
+    function hasCrushMove(board){for(let i=0;i<36;i++){for(const j of [i%6<5?i+1:-1,i<30?i+6:-1]){if(j<0||board[i]===board[j])continue;swapTiles(board,i,j);const good=crushMatches(board).size>0;swapTiles(board,i,j);if(good)return true;}}return false;}
+    function newCrushBoard(){let b;do{b=[];for(let i=0;i<36;i++){let v;do{v=Math.floor(Math.random()*CRUSH_ICONS.length);}while((i%6>=2&&b[i-1]===v&&b[i-2]===v)||(i>=12&&b[i-6]===v&&b[i-12]===v));b.push(v);}}while(!hasCrushMove(b));return b;}
+    function crushRefill(b,matched){for(const i of matched)b[i]=-1;for(let c=0;c<6;c++){let w=5;for(let r=5;r>=0;r--){const v=b[r*6+c];if(v>=0)b[w--*6+c]=v;}while(w>=0)b[w--*6+c]=Math.floor(Math.random()*CRUSH_ICONS.length);}}
+    function paintCrush(clearing=new Set()){const grid=$("crushGrid");grid.replaceChildren();crushBoard.forEach((v,i)=>{const b=document.createElement("button");b.type="button";b.className="crush-cell"+(i===crushSelected?" selected":"")+(clearing.has(i)?" clearing":"");b.textContent=CRUSH_ICONS[v]||"";b.setAttribute("aria-label",`Wiersz ${Math.floor(i/6)+1}, kolumna ${i%6+1}, ${CRUSH_ICONS[v]}`);b.setAttribute("aria-pressed",String(i===crushSelected));b.disabled=crushBusy||crushFinished;b.addEventListener("click",()=>tapCrush(i));grid.append(b);});$("crushMoves").textContent="Ruchy: "+crushMoves;$("crushScore").textContent=crushPoints+" pkt";}
+    function initCrush(){crushEpoch++;crushBoard=newCrushBoard();crushMoves=20;crushPoints=0;crushBusy=false;crushFinished=false;crushSelected=-1;$("crushResult").textContent="";paintCrush();}
+    const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+    async function tapCrush(i){if(crushBusy||crushFinished)return;if(crushSelected<0){crushSelected=i;paintCrush();return;}const a=crushSelected;crushSelected=-1;if(a===i){paintCrush();return;}if(Math.abs(Math.floor(a/6)-Math.floor(i/6))+Math.abs(a%6-i%6)!==1){crushSelected=i;paintCrush();return;}swapTiles(crushBoard,a,i);let matched=crushMatches(crushBoard);if(!matched.size){swapTiles(crushBoard,a,i);$("crushResult").textContent="Ta zamiana nie tworzy trójki – spróbuj inaczej!";paintCrush();return;}crushMoves--;crushBusy=true;const epoch=crushEpoch;let chain=0;while(matched.size){chain++;crushPoints+=matched.size*10*chain;paintCrush(matched);await delay(170);if(epoch!==crushEpoch)return;crushRefill(crushBoard,matched);paintCrush();await delay(100);if(epoch!==crushEpoch)return;matched=crushMatches(crushBoard);if(chain>=30&&matched.size){crushBoard=newCrushBoard();break;}}crushBusy=false;if(!crushMoves){crushFinished=true;$("crushResult").textContent=`Koniec gry! ${crushPoints} punktów 💕`;finishGame("crush",crushPoints);}else if(!hasCrushMove(crushBoard)){crushBoard=newCrushBoard();$("crushResult").textContent="Brak ruchów – nowy układ serduszek!";}else{$("crushResult").textContent=chain>1?`Kaskada ×${chain}! ✨`:"Pięknie! 💕";}paintCrush();}
+    $("crushStart").addEventListener("click",initCrush);
+    function stopExtraGames(){stopReflex();stopKarate();/* Heart Crush nie ma zegara; zachowujemy rozpoczętą planszę. */}
+    document.addEventListener("visibilitychange",()=>{if(document.hidden){stopExtraGames();}});
+    evaluateAchievements();refreshExtraHud();
+
 
     // Inicjalizacja stanu startowego
     if (dailyState.lastItem) {
